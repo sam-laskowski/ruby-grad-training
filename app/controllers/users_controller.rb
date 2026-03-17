@@ -8,9 +8,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
 
-      session[:user_id] = @user.id
-
-      redirect_to root_url, notice: "Registered Succesfully"
+      session[:current_user_id] = @user.id
+      redirect_to game_posts_url, notice: "Registered Succesfully"
     else
       render :new, status: :unprocessable_entity
     end

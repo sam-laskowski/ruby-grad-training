@@ -3,7 +3,7 @@ class GamePostsController < ApplicationController
   before_action :require_login, only: [:new, :create]
 
   def index
-    @game_posts = GamePost.includes(:user_owner).all
+    @game_posts = GamePost.includes(:user_owner, :subscribers).all
   end
 
   def new
