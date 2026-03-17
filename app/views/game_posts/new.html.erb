@@ -1,0 +1,8 @@
+<h2>Create new game post</h2>
+<%= form_with model: @game_post do |form| %>
+  <label for="name">
+    Game name
+    <%= form.text_field :name, required: true %>
+  </label>
+  <%= form.submit "Create game listing" %>
+<% end %>

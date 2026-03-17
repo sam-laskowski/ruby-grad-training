@@ -1,0 +1,10 @@
+<h1>
+    All Game posts
+</h1>
+<div>
+    <% @game_posts.each do |game_post| %>
+        <div>
+            <%= game_post.name %> added by <%= game_post.user_owner&.username %>
+        </div>
+    <% end %>
+</div>
