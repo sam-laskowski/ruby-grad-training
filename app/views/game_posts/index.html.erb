@@ -7,10 +7,9 @@
             <%= game_post.name %> added by <%= game_post.user_owner&.username %>
         </div>
         <br>
-        <h2>Subscribers</h2>
-        <% game_post.subscribers.each do |sub| %>
+        <h2>Confirmed members</h2>
+        <% game_post.accepted_subscribers.each do |sub| %>
             <%= sub.username %>
-            <span>,</span>
         <% end %>
         
         <%= subscription_button_for(game_post) %>
