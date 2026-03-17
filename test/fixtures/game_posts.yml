@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  location: MyString
+  time_start: 2026-03-17 09:33:22
+  time_end: 2026-03-17 09:33:22
+  user_owner: one
+  image: MyString
+  num_needed: 1
+  total_players: 1
+  description: MyText
+  details: MyText
+  cutoff_time: 2026-03-17 09:33:22
+  status: 1
+
+two:
+  name: MyString
+  location: MyString
+  time_start: 2026-03-17 09:33:22
+  time_end: 2026-03-17 09:33:22
+  user_owner: two
+  image: MyString
+  num_needed: 1
+  total_players: 1
+  description: MyText
+  details: MyText
+  cutoff_time: 2026-03-17 09:33:22
+  status: 1
