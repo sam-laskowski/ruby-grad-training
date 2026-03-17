@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "dashboard/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -16,4 +17,11 @@ Rails.application.routes.draw do
   resources :entries, only: [ :create, :new, :index, :destroy ]
   
   resources :users, only: [ :new, :create, :show ]
+
+  get "login", to: "sessions#new", as: :login
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy", as: :logout
+
+  get 'sign_up', to: 'users#new', as: :sign_up
+  post 'sign_up', to: 'users#create'
 end
