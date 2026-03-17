@@ -14,4 +14,6 @@ Rails.application.routes.draw do
 
   root 'application#hello'
   resources :entries, only: [ :create, :new, :index, :destroy ]
+  
+  resources :users, only: [ :new, :create, :show ]
 end
