@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   get "game_posts/new", to: "game_posts#new", as: :new_game_post
   post "game_posts", to: "game_posts#create"
 
+  resources :game_posts, only: [:destroy]
+
   resources :game_posts do
     resources :enrollments, only: [:create, :destroy, :update]
   end

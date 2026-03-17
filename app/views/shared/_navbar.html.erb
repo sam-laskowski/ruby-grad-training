@@ -2,12 +2,16 @@
     <h1></h1>
     <ul>
         <% if user_signed_in? %>
-        <li>Logged in user: <%= current_user.username %></li>
-        <li><%= link_to 'Log out', logout_path, data: { turbo_method: :delete } %></li>
-        <li><%= link_to 'create game post', new_game_post_path %></li>
-        <li><%= link_to 'view all game posts', game_posts_path %></li>
-        <li><%= link_to 'view your incoming requests', game_post_path(current_user.owned_games.last) %></li>
+            <li>Logged in user: <%= current_user.username %></li>
+            <li><%= link_to 'Log out', logout_path, data: { turbo_method: :delete } %></li>
+            <li><%= link_to 'create game post', new_game_post_path %></li>
+            <li><%= link_to 'view all game posts', game_posts_path %></li>
+            <% if current_user&.owned_games.none? %>
+                <div>No games posted</div>
+            <% else %>
 
+                <li><%= link_to 'view your incoming requests', game_post_path(current_user.owned_games.last) %></li>
+            <% end %>
         <% else %>
             <li><%= link_to 'Sign up', sign_up_path %></li>
             <li><%= link_to 'Login', login_path %></li>

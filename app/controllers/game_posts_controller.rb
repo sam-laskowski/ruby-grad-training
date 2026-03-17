@@ -29,6 +29,12 @@ class GamePostsController < ApplicationController
     end
   end
 
+  def destroy
+    GamePost.find(params[:id]).destroy
+    redirect_to game_posts_url
+  end
+
+
 
   private
     def game_post_params

@@ -1,6 +1,6 @@
 class GamePost < ApplicationRecord
   belongs_to :user_owner, class_name: "User"
-  has_many :enrollments
+  has_many :enrollments, dependent: :destroy
   has_many :subscribers, through: :enrollments, source: :user
 
   has_many :accepted_subscribers, -> { where(enrollments: { status: :accepted }) }, 

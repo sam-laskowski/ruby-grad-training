@@ -4,7 +4,7 @@ TODO:
 
 User Onboarding: input user info
 
-Curr: Make view incoming requests button work
+Curr: delete your game post
 
 Things you may want to cover:
 

@@ -1,6 +1,7 @@
 <h1><%= @game_post.name %></h1>
 
 <% if current_user == @game_post.user_owner %>
+<%= button_to "Delete", @game_post, method: :delete %>
   <section class="owner-controls">
     <h2>Pending Requests</h2>
     <% if @pending_enrollments.any? %>
