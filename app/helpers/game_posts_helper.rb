@@ -1,0 +1,2 @@
+module GamePostsHelper
+end
