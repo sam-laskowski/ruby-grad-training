@@ -4,7 +4,7 @@ TODO:
 
 User Onboarding: input user info
 
-Curr: User can only request one listing
+Curr: Change Unrequest button to Confirmed if the user got confirmed
 
 Things you may want to cover:
 

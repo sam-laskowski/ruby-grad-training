@@ -3,6 +3,12 @@ module EnrollmentsHelper
     return link_to("Log in to request", login_path) if current_user.nil?
 
     enrollment = current_user.enrollments.find_by(game_post: game_post)
+
+    # if enrollment.status == :accepted
+    #   button_to "Confirmed", game_post_enrollment_path(game_post, enrollment),
+    #   disabled: true
+    # end
+
     if enrollment
       button_to "Unrequest", game_post_enrollment_path(game_post, enrollment),
       method: :delete
