@@ -4,7 +4,7 @@ TODO:
 
 User Onboarding: input user info
 
-Curr: User only create one game post
+Curr: User can only request one listing
 
 Things you may want to cover:
 

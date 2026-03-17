@@ -11,8 +11,12 @@
         <% game_post.accepted_subscribers.each do |sub| %>
             <%= sub.username %>
         <% end %>
-        
-        <%= subscription_button_for(game_post) %>
-        
+        <% if user_signed_in? %>
+            <% if current_user&.owned_games.none? && current_user&.enrollments.none? %>
+                <%= subscription_button_for(game_post) %>
+            <% else %>
+                <%= subscription_button_for(game_post, disabled: true) %>
+            <% end %>
+        <% end %>
     <% end %>
 </div>
