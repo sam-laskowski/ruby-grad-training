@@ -6,6 +6,14 @@ class GamePostsController < ApplicationController
     @game_posts = GamePost.includes(:user_owner, :subscribers).all
   end
 
+  def show
+    @game_post = GamePost.find(params[:id])
+
+    if current_user == @game_post.user_owner
+      @pending_enrollments = @game_post.enrollments.pending
+    end
+  end
+
   def new
     @game_post = current_user.game_posts.build
   end
