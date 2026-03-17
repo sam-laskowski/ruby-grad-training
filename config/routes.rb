@@ -30,6 +30,6 @@ Rails.application.routes.draw do
   post "game_posts", to: "game_posts#create"
 
   resources :game_posts do
-    resources :enrollments, only: [:create, :destroy]
+    resources :enrollments, only: [:create, :destroy, :update]
   end
 end
