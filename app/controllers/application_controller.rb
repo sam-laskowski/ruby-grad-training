@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   def hello
-    render html: "Hello, world!"
+    render html: ""
   end
 
 end
