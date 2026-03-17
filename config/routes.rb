@@ -24,4 +24,8 @@ Rails.application.routes.draw do
 
   get 'sign_up', to: 'users#new', as: :sign_up
   post 'sign_up', to: 'users#create'
+
+  get "game_posts", to: "game_posts#index", as: :game_posts
+  get "game_posts/new", to: "game_posts#new", as: :new_game_post
+  post "game_posts", to: "game_posts#create"
 end
