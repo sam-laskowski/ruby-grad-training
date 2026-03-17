@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       if @user.authenticate(params[:user][:password])
         reset_session
         session[:current_user_id] = @user.id
-        redirect_to root_url, notice: "Signed in."
+        redirect_to game_posts_url, notice: "Signed in."
       else
         flash.now[:alert] = "Incorrect username or password."
         render :new, status: :unprocessable_entity
