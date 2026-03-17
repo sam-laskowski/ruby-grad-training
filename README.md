@@ -1,11 +1,10 @@
 # README
 
 TODO:
+
 User Onboarding: input user info
 
-fix routing
-
-User subscribe to listing
+Curr: User only create one game post
 
 Things you may want to cover:
 

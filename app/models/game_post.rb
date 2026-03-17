@@ -7,4 +7,14 @@ class GamePost < ApplicationRecord
            through: :enrollments, source: :user
 
   enum status: { open:0, full:1, cancelled:2, completed:3 }
+
+  validate :owner_must_not_be_enrolled, on: :create
+
+  private
+
+  def owner_must_not_be_enrolled
+    if user_owner.enrollments.exists?
+      errors.add(:base, "You cannot start a new listing while you are enrolled in another game.")
+    end
+  end
 end

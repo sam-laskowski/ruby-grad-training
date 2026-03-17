@@ -1,8 +1,13 @@
-<h2>Create new game post</h2>
-<%= form_with model: @game_post do |form| %>
-  <label for="name">
-    Game name
-    <%= form.text_field :name, required: true %>
-  </label>
-  <%= form.submit "Create game listing" %>
+<% console %>
+<% if current_user.owned_games.none? && current_user.enrollments.none? %>
+  <h2>Create new game post</h2>
+  <%= form_with model: @game_post do |form| %>
+    <label for="name">
+      Game name
+      <%= form.text_field :name, required: true %>
+    </label>
+    <%= form.submit "Create game listing" %>
+  <% end %>
+<% else %>
+  <p class="text-muted">You can only have one active game or request at a time.</p>
 <% end %>
