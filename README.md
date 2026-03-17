@@ -4,7 +4,7 @@ TODO:
 
 User Onboarding: input user info
 
-Curr: Change Unrequest button to Confirmed if the user got confirmed
+Curr: Make view incoming requests button work
 
 Things you may want to cover:
 
