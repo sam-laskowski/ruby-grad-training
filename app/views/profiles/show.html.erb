@@ -1,4 +1,7 @@
-<div>Profile for: <% @user.username %></div>
-<div><%= @user.name %></div>
-<div><%= @user.bio %></div>
-<div><%= image_tag(@user.photo) %></div>
+
+<div>Profile for: <%= @user.username %></div>
+<div><%= @user&.name %></div>
+<div><%= @user&.bio %></div>
+<% if @user.photo.attached? %>
+  <div><%= image_tag(@user.photo) %></div>
+<% end %>

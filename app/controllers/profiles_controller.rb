@@ -1,6 +1,9 @@
 class ProfilesController < ApplicationController
+  before_action :require_login, only: [:show]
 
   def show
-    @user = User.find(session[:current_user_id])
+    if user_signed_in?
+      @user = User.find(session[:current_user_id])
+    end
   end
 end
