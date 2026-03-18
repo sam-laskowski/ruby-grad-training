@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     if @user.save
 
       session[:current_user_id] = @user.id
-      redirect_to game_posts_url, notice: "Registered Succesfully"
+      redirect_to edit_onboarding_path(@user), notice: "Registered Succesfully"
     else
       render :new, status: :unprocessable_entity
     end

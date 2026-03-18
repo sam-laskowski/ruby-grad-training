@@ -34,4 +34,8 @@ Rails.application.routes.draw do
   resources :game_posts do
     resources :enrollments, only: [:create, :destroy, :update]
   end
+
+  resource :onboarding, only: [:edit, :update]
+
+  resource :profile, only: [:show]
 end

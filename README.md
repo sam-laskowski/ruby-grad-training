@@ -1,8 +1,20 @@
 # README
 
+# DROPINS
+
 TODO:
 
-User Onboarding: input user info
+- User Onboarding: Profile creation, input user info
+- Include time validation
+- Full game post onboarding
+- notifications
+- testing
+- styling
+- profile view
+- confirmation view
+- game post display
+- hover effects
+-
 
 Curr: delete your game post
 
