@@ -21,6 +21,7 @@ class GamePostsController < ApplicationController
   def create
     @game_post = GamePost.new(game_post_params)
     @game_post.user_owner = current_user
+    @game_post.status = 0
     if @game_post.save
       redirect_to game_posts_path, notice: "Game post created"
     else
@@ -45,7 +46,7 @@ class GamePostsController < ApplicationController
 
   private
     def game_post_params
-      params.require(:game_post).permit(:name)
+      params.require(:game_post).permit(:name, :location, :time_start, :time_end, :total_players, :description, :details, :duration, images: [])
     end
 
     def require_login

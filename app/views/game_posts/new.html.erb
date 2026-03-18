@@ -1,13 +1,44 @@
 <% console %>
 <% if current_user.owned_games.none? && current_user.enrollments.none? %>
-  <h2>Create new game post</h2>
+  <h2>Create new dropin post</h2>
   <%= form_with model: @game_post do |form| %>
     <label for="name">
-      Game name
+      Activity
       <%= form.text_field :name, required: true %>
     </label>
-    <%= form.submit "Create game listing" %>
+
+    <label for="location">
+      Location
+      <%= form.text_field :location, required: true %>
+    </label>
+
+    <label for="time_start">
+      Start Time
+      <%= form.time_field :time_start, required: true %>
+    </label>
+
+    <label for="duration">
+      Duration (hours)
+      <%= form.number_field :duration, in: 1..23, step: 1, required: false %>
+    </label>
+
+    <label for="total_players">
+      How many more people are needed
+      <%= form.number_field :total_players, in: 1..10, step: 1, required: true %>
+    </label>
+
+    <label for="description">
+      Description
+      <%= form.text_area :description, required: false %>
+    </label>
+
+    <label for="images">
+      <%= form.label :images %>
+      <%= form.file_field :images, multiple: true %>
+    </label>
+
+    <%= form.submit "Create" %>
   <% end %>
 <% else %>
-  <p class="text-muted">You can only have one active game or request at a time.</p>
+  <p class="text-muted">You can only have one active post or request at a time.</p>
 <% end %>

@@ -1,4 +1,7 @@
 <h1><%= @game_post.name %></h1>
+<% @game_post.images.each do |image| %>
+    <%= image_tag(image) %>
+<% end %>
 
 <% if current_user == @game_post.user_owner %>
 <%= button_to "Delete", @game_post, method: :delete %>
