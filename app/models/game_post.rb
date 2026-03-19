@@ -39,6 +39,6 @@ class GamePost < ApplicationRecord
   end
 
   def enroll_owner
-    enrollments.create(user: user_owner)
+    enrollments.create(user: user_owner, status: :accepted)
   end
 end
