@@ -4,11 +4,22 @@
         <%= link_to '📩 Dropins', game_posts_path, class: "fs-1 fw-bolder text-decoration-none text-reset" %>
         </h1>
         <% if user_signed_in? %>
+            <%= link_to 'Feed', game_posts_path, class: "text-decoration-none text-reset" %>
+            
             <%= link_to 'create game post', new_game_post_path %>
-            <%= link_to 'Log out', logout_path, data: { turbo_method: :delete } %>
-            <%= link_to 'view all game posts', game_posts_path %>
-            <%= link_to 'view profile', profile_path %>
             <%= link_to 'view confirmed events', confirmed_event_path %>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle fs-1"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <%= link_to 'view profile', profile_path, class: "dropdown-item" %>
+                    <%= link_to 'Log out', logout_path, data: { turbo_method: :delete }, class: "dropdown-item" %>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </div>
             <% if current_user&.owned_games.none? %>
                 <div>No games posted</div>
             <% else %>
