@@ -3,26 +3,27 @@
 </h1>
 <div>
     <% @game_posts.each do |game_post| %>
-        <div>
+        <section class="border">
             <h2>
                 <%= game_post.name %> added by <%= game_post.user_owner&.username %>
             </h2>
-        </div>
-        <br>
-        <h3>Confirmed members</h3>
-        <% game_post.accepted_subscribers.each do |sub| %>
-            <%= sub.username %>
-        <% end %>
-        <% if user_signed_in? %>
-            <% if game_post.enrollments.exists?(user_id: current_user.id, status: 'accepted') %>
-                ✅ confrimed
-            <% else %>
-                <% if current_user&.owned_games.none? && current_user&.enrollments.none? %>
-                    <%= subscription_button_for(game_post) %>
+            <h3>Attendees: <%= game_post.accepted_subscribers.count %>/<%= game_post.total_players %></h3>
+            <br>
+            <h3>Confirmed members</h3>
+            <% game_post.accepted_subscribers.each do |sub| %>
+                <%= sub.username %>
+            <% end %>
+            <% if user_signed_in? %>
+                <% if game_post.enrollments.exists?(user_id: current_user.id, status: 'accepted') %>
+                        ✅ confrimed
                 <% else %>
-                    <%= subscription_button_for(game_post, disabled: true) %>
+                    <% if current_user&.owned_games.none? && current_user&.enrollments.none? %>
+                        <%= subscription_button_for(game_post) %>
+                    <% else %>
+                        <%= subscription_button_for(game_post, disabled: true) %>
+                    <% end %>
                 <% end %>
                 <% end %>
             <% end %>
-    <% end %>
+        </section>
 </div>

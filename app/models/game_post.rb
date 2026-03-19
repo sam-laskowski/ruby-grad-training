@@ -24,6 +24,14 @@ class GamePost < ApplicationRecord
       .where(enrollments: { user_id: user.id, status: :accepted})
   }
 
+  def check_if_full!
+    return unless open? && total_players.present?
+
+    if accepted_subscribers.count >= total_players
+      full!
+    end
+  end
+
   private
 
   def owner_must_not_be_enrolled
