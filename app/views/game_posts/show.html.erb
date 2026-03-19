@@ -2,9 +2,13 @@
 <% @game_post.images.each do |image| %>
     <%= image_tag(image) %>
 <% end %>
+<h3>Attendees: <%= @game_post.accepted_subscribers.count %>/<%= @game_post.total_players %></h3>
 
 <% if current_user == @game_post.user_owner %>
-<%= button_to "Delete", @game_post, method: :delete %>
+  <% if @game_post.open? || @game_post.full? %>
+    <%= button_to "Delete", @game_post, method: :delete %>
+    <%= button_to "Confirm Event", confirm_game_post_path(@game_post), method: :patch  %>
+  <% end %>
   <section class="owner-controls">
     <h2>Pending Requests</h2>
     <% if @pending_enrollments.any? %>
@@ -20,7 +24,6 @@
             <tr>
               <td><%= enrollment.user.username %></td>
               <td>
-                <%# We link to the Enrollment controller to update the status %>
                 <%= button_to "Accept", game_post_enrollment_path(@game_post, enrollment, status: 'accepted'), method: :patch %>
                 <%= button_to "Decline", game_post_enrollment_path(@game_post, enrollment, status: 'rejected'), method: :patch %>
               </td>

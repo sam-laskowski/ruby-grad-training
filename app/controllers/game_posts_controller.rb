@@ -39,6 +39,16 @@ class GamePostsController < ApplicationController
     redirect_to game_posts_url, alert: "You're not the owner"
   end
 
+  def confirm
+    @game_post = GamePost.find(params[:id])
+  
+    if @game_post.confirmed!
+      redirect_to @game_post, notice: "Game has been confirmed!"
+    else
+      redirect_to @game_post, alert: "Unable to confirm game."
+    end
+  end
+
 
 
   private
