@@ -24,6 +24,8 @@ class GamePost < ApplicationRecord
       .where(enrollments: { user_id: user.id, status: :accepted})
   }
 
+  scope :not_confirmed, -> { where.not(status: :confirmed) }
+
   def check_if_full!
     return unless open? && total_players.present?
 

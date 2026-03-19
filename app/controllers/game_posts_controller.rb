@@ -2,9 +2,11 @@ class GamePostsController < ApplicationController
 
   before_action :require_login, only: [:new, :create]
 
-  def index
-    @game_posts = GamePost.includes(:user_owner, :subscribers).all
-  end
+    def index
+      @game_posts = GamePost.not_confirmed
+                            .includes(:user_owner, :subscribers)
+                            .order(created_at: :desc)
+    end
 
   def show
     @game_post = GamePost.find(params[:id])
