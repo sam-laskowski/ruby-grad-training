@@ -1,22 +1,24 @@
-<nav>
-    <h1></h1>
-    <ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <h1 class="navbar-brand ">
+        <%= link_to '📩 Dropins', game_posts_path, class: "fs-1 fw-bolder text-decoration-none text-reset" %>
+        </h1>
         <% if user_signed_in? %>
-            <li>Logged in user: <%= current_user.username %></li>
-            <li><%= link_to 'Log out', logout_path, data: { turbo_method: :delete } %></li>
-            <li><%= link_to 'create game post', new_game_post_path %></li>
-            <li><%= link_to 'view all game posts', game_posts_path %></li>
-            <li><%= link_to 'view profile', profile_path %></li>
-            <li><%= link_to 'view confirmed events', confirmed_event_path %></li>
+            <%= link_to 'create game post', new_game_post_path %>
+            <%= link_to 'Log out', logout_path, data: { turbo_method: :delete } %>
+            <%= link_to 'view all game posts', game_posts_path %>
+            <%= link_to 'view profile', profile_path %>
+            <%= link_to 'view confirmed events', confirmed_event_path %>
             <% if current_user&.owned_games.none? %>
                 <div>No games posted</div>
             <% else %>
-
-                <li><%= link_to 'view your incoming requests', game_post_path(current_user.owned_games.last) %></li>
+                <%= link_to 'view your incoming requests', game_post_path(current_user.owned_games.last) %>
             <% end %>
         <% else %>
-            <li><%= link_to 'Sign up', sign_up_path %></li>
-            <li><%= link_to 'Login', login_path %></li>
+        <div class="d-flex gap-0 column-gap-3">
+            <%= link_to 'Login', login_path, class: "text-decoration-none text-reset" %>
+            <%= link_to 'Sign up', sign_up_path, class: "text-decoration-none text-reset" %>
+        </div>
         <% end %>
-    </ul>
+    </div>
 </nav>
