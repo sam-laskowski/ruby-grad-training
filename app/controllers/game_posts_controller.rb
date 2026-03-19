@@ -31,15 +31,12 @@ class GamePostsController < ApplicationController
   end
 
   def destroy
-    # GamePost.find(params[:id]).destroy
-    # redirect_to game_posts_url
-
     @game_post = current_user.owned_games.find(params[:id])
   
     @game_post.destroy
     redirect_to game_posts_url, notice: "Post deleted."
     rescue ActiveRecord::RecordNotFound
-    redirect_to game_posts_url, alert: "You can't delete what you don't own!"
+    redirect_to game_posts_url, alert: "You're not the owner"
   end
 
 

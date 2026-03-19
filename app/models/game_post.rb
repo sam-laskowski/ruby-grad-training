@@ -14,6 +14,8 @@ class GamePost < ApplicationRecord
 
   validate :owner_must_not_be_enrolled, on: :create
 
+  after_create :enroll_owner
+
   before_save :calculate_end_time
 
   scope :confirmed_for_user, -> (user) {
@@ -34,5 +36,9 @@ class GamePost < ApplicationRecord
     if time_start.present? && duration.present?
       self.time_end = time_start + duration.to_i.hours
     end
+  end
+
+  def enroll_owner
+    enrollments.create(user: user_owner)
   end
 end
