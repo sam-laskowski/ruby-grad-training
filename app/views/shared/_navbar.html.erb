@@ -1,35 +1,51 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <h1 class="navbar-brand ">
-        <%= link_to '📩 Dropins', game_posts_path, class: "fs-1 fw-bolder text-decoration-none text-reset" %>
-        </h1>
+  <div class="container-fluid">
+    <%= link_to '📩 Dropins', game_posts_path, class: "navbar-brand fs-1 fw-bolder text-decoration-none text-reset" %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <div class="navbar-nav ms-auto align-items-center column-gap-2">
         <% if user_signed_in? %>
-            <%= link_to 'Feed', game_posts_path, class: "text-decoration-none text-reset" %>
-            
-            <%= link_to 'create game post', new_game_post_path %>
-            <%= link_to 'view confirmed events', confirmed_event_path %>
-            <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person-circle fs-1"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <%= link_to 'view profile', profile_path, class: "dropdown-item" %>
-                    <%= link_to 'Log out', logout_path, data: { turbo_method: :delete }, class: "dropdown-item" %>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-            <% if current_user&.owned_games.none? %>
-                <div>No games posted</div>
-            <% else %>
-                <%= link_to 'view your incoming requests', game_post_path(current_user.owned_games.last) %>
-            <% end %>
-        <% else %>
-        <div class="d-flex gap-0 column-gap-3">
-            <%= link_to 'Login', login_path, class: "text-decoration-none text-reset" %>
-            <%= link_to 'Sign up', sign_up_path, class: "text-decoration-none text-reset" %>
+          <%= link_to 'Feed', game_posts_path, class: "nav-link text-reset" %>
+          <%= link_to 'Create Post', new_game_post_path, class: "nav-link" %>
+          <% if current_user&.owned_games.none? %>
+            <span class="navbar-text ms-2 text-muted small">None posted</span>
+          <% else %>
+            <%= link_to 'Requests', game_post_path(current_user.owned_games.last), class: "btn btn-sm btn-outline-primary ms-2" %>
+          <% end %>
+            <%= link_to 'Event', confirmed_event_path, class: "text-decoration-none text-reset" %>
+
+          
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-1"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenu">
+                <li>
+                    <%= link_to profile_path, class: "dropdown-item d-flex align-items-center gap-2" do %>
+                        <i class="bi bi-person-circle"></i>
+                        <span>View Profile</span>
+                    <% end %>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <%= link_to logout_path, data: { turbo_method: :delete }, class: "dropdown-item d-flex align-items-center gap-2" do %>
+                        <i class="bi bi-door-open"></i>
+                        <span>Log out</span>
+                    <% end %>
+                </li>
+            </ul>
         </div>
+
+
+        <% else %>
+          <%= link_to 'Login', login_path, class: "nav-link text-reset me-2" %>
+          <%= link_to 'Sign up', sign_up_path, class: "btn btn-primary" %>
         <% end %>
+      </div>
     </div>
+  </div>
 </nav>
