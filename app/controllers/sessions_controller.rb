@@ -21,6 +21,6 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to root_url
+    redirect_to game_posts_url, status: :see_other, notice: "Logged out!"
   end
 end
