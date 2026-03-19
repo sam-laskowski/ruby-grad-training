@@ -1,13 +1,15 @@
 <h1>
-    All Game posts
+    All posts
 </h1>
 <div>
     <% @game_posts.each do |game_post| %>
         <div>
-            <%= game_post.name %> added by <%= game_post.user_owner&.username %>
+            <h2>
+                <%= game_post.name %> added by <%= game_post.user_owner&.username %>
+            </h2>
         </div>
         <br>
-        <h2>Confirmed members</h2>
+        <h3>Confirmed members</h3>
         <% game_post.accepted_subscribers.each do |sub| %>
             <%= sub.username %>
         <% end %>
