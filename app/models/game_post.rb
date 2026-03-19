@@ -10,11 +10,17 @@ class GamePost < ApplicationRecord
   has_many :accepted_subscribers, -> { where(enrollments: { status: :accepted }) }, 
            through: :enrollments, source: :user
 
-  enum status: { open:0, full:1, cancelled:2, completed:3 }
+  enum status: { open:0, full:1, confirmed:2, cancelled:3, completed:4 }
 
   validate :owner_must_not_be_enrolled, on: :create
 
   before_save :calculate_end_time
+
+  scope :confirmed_for_user, -> (user) {
+    joins(:enrollments)
+      .where(status: :confirmed)
+      .where(enrollments: { user_id: user.id, status: :accepted})
+  }
 
   private
 

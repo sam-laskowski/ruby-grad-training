@@ -1,0 +1,15 @@
+<h1>My Confirmed Events</h1>
+
+<% if @confirmed_events.any? %>
+  <div class="events-grid">
+    <% @confirmed_events.each do |post| %>
+      <div class="event-card">
+        <h2><%= post.title %></h2>
+        <p><%= post.description %></p>
+        <span class="badge">Status: Confirmed & Accepted</span>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>You don't have any confirmed events yet.</p>
+<% end %>

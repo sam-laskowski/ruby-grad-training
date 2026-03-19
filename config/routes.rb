@@ -38,4 +38,6 @@ Rails.application.routes.draw do
   resource :onboarding, only: [:edit, :update]
 
   resource :profile, only: [:show]
+
+  resource :confirmed_event, only: [:show]
 end

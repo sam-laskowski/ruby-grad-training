@@ -20,7 +20,7 @@ module Authenticated
   def require_login
     unless user_signed_in?
       flash[:alert] = "You must be signed in to access this section"
-      redirect_to root_path # Or your login_path
+      redirect_to login_url
     end
   end
 

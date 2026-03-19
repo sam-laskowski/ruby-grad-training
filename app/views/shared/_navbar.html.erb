@@ -7,6 +7,7 @@
             <li><%= link_to 'create game post', new_game_post_path %></li>
             <li><%= link_to 'view all game posts', game_posts_path %></li>
             <li><%= link_to 'view profile', profile_path %></li>
+            <li><%= link_to 'view confirmed events', confirmed_event_path %></li>
             <% if current_user&.owned_games.none? %>
                 <div>No games posted</div>
             <% else %>

@@ -1,0 +1,2 @@
+module ConfirmedEventsHelper
+end
