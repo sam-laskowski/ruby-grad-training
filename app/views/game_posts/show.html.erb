@@ -1,8 +1,10 @@
 <h1><%= @game_post.name %></h1>
-<% @game_post.images.each do |image| %>
-    <%= image_tag(image) %>
+<% if @game_post.images.attached? %>
+  <% @game_post.images.each do |image| %>
+      <%= image_tag(image) %>
+  <% end %>
+    <% image_tag @game_post.images.first %>
 <% end %>
-<% image_tag @game_post.images.first %>
 <h3>Attendees: <%= @game_post.accepted_subscribers.count %>/<%= @game_post.total_players %></h3>
 
 <% if current_user == @game_post.user_owner %>

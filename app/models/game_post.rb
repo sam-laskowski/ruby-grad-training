@@ -26,6 +26,10 @@ class GamePost < ApplicationRecord
 
   scope :not_confirmed, -> { where.not(status: :confirmed) }
 
+  has_one_attached :cover_image do |attachable|
+    attachable.variant :thumb, resize_to_limit: [200, 100]
+  end
+
   def check_if_full!
     return unless open? && total_players.present?
 

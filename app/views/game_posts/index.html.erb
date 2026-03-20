@@ -1,29 +1,60 @@
-<h1>
-    All posts
-</h1>
-<div>
-    <% @game_posts.each do |game_post| %>
-        <section class="border">
-            <h2>
-                <%= game_post.name %> added by <%= game_post.user_owner&.username %>
-            </h2>
-            <h3>Attendees: <%= game_post.accepted_subscribers.count %>/<%= game_post.total_players %></h3>
-            <br>
-            <h3>Confirmed members</h3>
-            <% game_post.accepted_subscribers.each do |sub| %>
-                <%= sub.username %>
-            <% end %>
-            <% if user_signed_in? %>
-                <% if game_post.enrollments.exists?(user_id: current_user.id, status: 'accepted') %>
-                        ✅ confrimed
-                <% else %>
-                    <% if current_user&.owned_games.none? && current_user&.enrollments.none? %>
-                        <%= subscription_button_for(game_post) %>
-                    <% else %>
-                        <%= subscription_button_for(game_post, disabled: true) %>
-                    <% end %>
+<div class="container">
+    <h1>
+        All posts
+    </h1>
+    <div class="d-flex flex-column row-gap-2">
+        <% @game_posts.each do |game_post| %>
+        <div class="bg-secondary-subtle rounded-4 shadow-sm border-0 p-2">
+
+                    <div class="position-relative overflow-hidden">
+                        <h2>
+                            <%= game_post.name %>
+                        </h2>
+                        <%# image %>
+                        <% if game_post.cover_image.attached? %>
+                            <%= image_tag game_post.cover_image, class: "position-absolute top-0 end-0 object-fit-cover", style: "width: 30%; height: 60px;" %>
+                        <% end %>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <i class="bi bi-person-circle fs-2"></i>
+                            <div class="mx-2">
+                                <p class="mb-0"><%= game_post.user_owner&.name %></p>
+                                <p class="mb-0 text-muted">@<%= game_post.user_owner.username %></p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Confirmed members</h3>
+                            <div class="d-flex column-gap-1">
+                                <% game_post.accepted_subscribers.each do |sub| %>
+                                    <div>
+                                        <i class="bi bi-person-circle"></i>
+                                        <%# <%= sub.username %>
+                                    </div>
+                                <% end %>
+                                <i class="bi bi-plus-circle"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Attendees: <%= game_post.accepted_subscribers.count %>/<%= game_post.total_players %></h3>
+                            <h4 class="text-muted">in <%= time_ago_in_words(game_post.time_start) %></h4>
+                            <h6 class="text-muted"><%= "Today at #{game_post.time_start.strftime('%H:%M')}" %></h4>
+                        </div>
+
+                    </div>
+                    <% if user_signed_in? %>
+                        <% if game_post.enrollments.exists?(user_id: current_user.id, status: 'accepted') %>
+                                ✅ confrimed
+                        <% else %>
+                            <% if current_user&.owned_games.none? && current_user&.enrollments.none? %>
+                                <%= subscription_button_for(game_post) %>
+                            <% else %>
+                                <%= subscription_button_for(game_post, disabled: true) %>
+                            <% end %>
+                        <% end %>
+                        <% end %>
+        </div>
                 <% end %>
-                <% end %>
-            <% end %>
-        </section>
+    </div>
 </div>
