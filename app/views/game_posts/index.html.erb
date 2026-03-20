@@ -1,60 +1,249 @@
-<div class="container">
-    <h1>
-        All posts
-    </h1>
-    <div class="d-flex flex-column row-gap-2">
-        <% @game_posts.each do |game_post| %>
-        <div class="bg-secondary-subtle rounded-4 shadow-sm border-0 p-2">
+<div class="container py-4">
+  <style>
+    :root {
+      --salmon: #FA8072;
+      --salmon-soft: #FFE4DE;
+      --salmon-ink: #3A2B2B;
+      --salmon-border: rgba(250, 128, 114, 0.35);
+    }
 
-                    <div class="position-relative overflow-hidden">
-                        <h2>
-                            <%= game_post.name %>
-                        </h2>
-                        <%# image %>
-                        <% if game_post.cover_image.attached? %>
-                            <%= image_tag game_post.cover_image, class: "position-absolute top-0 end-0 object-fit-cover", style: "width: 30%; height: 60px;" %>
-                        <% end %>
+    .game-posts-hero {
+      background: linear-gradient(135deg, var(--salmon-soft), #ffffff);
+      border: 1px solid var(--salmon-border);
+      border-radius: 1rem;
+    }
+
+    .btn-salmon {
+      background: var(--salmon);
+      border-color: var(--salmon);
+      color: #fff;
+    }
+
+    .btn-salmon:hover {
+      background: #f56f61;
+      border-color: #f56f61;
+      color: #fff;
+    }
+
+    .game-post-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 1rem;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .game-post-card:hover {
+      #transform: translateY(-1px);
+      box-shadow: 0 0.5rem 1.25rem rgba(250, 128, 114, 0.12);
+    }
+
+    .game-post-card-body {
+      padding-right: 132px; /* leaves room for the top-right image */
+    }
+
+    @media (max-width: 576px) {
+      .game-post-card-body {
+        padding-right: 0;
+      }
+    }
+
+    .game-post-cover {
+      width: 96px;
+      height: 96px;
+      border-radius: 1rem;
+      object-fit: cover;
+      object-position: center;
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+    }
+
+    .game-post-cover-placeholder {
+      width: 96px;
+      height: 96px;
+      border-radius: 1rem;
+      background: var(--salmon-soft);
+      border: 1px dashed rgba(0, 0, 0, 0.12);
+      color: var(--salmon-ink);
+    }
+
+    .game-post-owner-avatar {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--salmon-soft);
+      border: 1px solid var(--salmon-border);
+    }
+
+    .game-post-owner-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+    }
+
+    .game-post-attendee-avatar {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--salmon-soft);
+      border: 1px solid var(--salmon-border);
+      margin-right: 0.25rem;
+    }
+
+    .game-post-attendee-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+    }
+
+    .game-post-more-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--salmon-soft);
+      border: 1px solid var(--salmon-border);
+      color: var(--salmon-ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .game-post-title {
+      color: var(--salmon-ink);
+    }
+  </style>
+
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="h5 mb-0 text-muted">All live listings</h2>
+    <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);">
+      <%= @game_posts.size %> posts
+    </span>
+  </div>
+
+  <% if user_signed_in? %>
+    <% has_active_request = current_user.enrollments.where(status: [:pending, :accepted]).exists? %>
+    <% has_owned_post = current_user.owned_games.exists? %>
+  <% end %>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <% @game_posts.each do |game_post| %>
+      <% owner = game_post.user_owner %>
+      <% confirmed_subscribers = game_post.accepted_subscribers %>
+      <% confirmed_count = confirmed_subscribers.count %>
+      <% total_players = game_post.total_players.to_i %>
+      <% time_start = game_post.time_start %>
+
+      <div class="col">
+        <div class="game-post-card h-100 shadow-sm">
+          <div class="position-relative game-post-card-body p-3">
+            <div class="position-absolute top-0 end-0 p-3">
+              <% if game_post.cover_image.attached? %>
+                <%= image_tag game_post.cover_image.variant(:thumb), alt: "#{game_post.name} cover", class: "game-post-cover" %>
+              <% elsif game_post.images.attached? %>
+                <%= image_tag game_post.images.first.variant(resize_to_fill: [96, 96]).processed, alt: "#{game_post.name} cover", class: "game-post-cover" %>
+              <% else %>
+                <div class="game-post-cover-placeholder d-flex align-items-center justify-content-center">
+                  <i class="bi bi-image fs-4"></i>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="d-flex align-items-start justify-content-between gap-3">
+              <div class="min-w-0">
+                <h3 class="h5 fw-bold mb-1 game-post-title">
+                  <%= link_to game_post.name, game_post_path(game_post), class: "text-decoration-none game-post-title" %>
+                </h3>
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <div class="game-post-owner-avatar rounded-circle overflow-hidden">
+                    <% if owner&.photo&.attached? %>
+                      <%= image_tag owner.photo.variant(resize_to_fill: [44, 44]).processed, alt: "#{owner.username} profile" %>
+                    <% else %>
+                      <i class="bi bi-person-circle text-muted fs-4"></i>
+                    <% end %>
+                  </div>
+
+                  <div class="min-w-0">
+                    <div class="fw-semibold text-truncate"><%= owner&.name %></div>
+                    <div class="text-muted small">@<%= owner&.username %></div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                  <% if game_post.location.present? %>
+                    <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);">
+                      <i class="bi bi-geo-alt me-1"></i><%= game_post.location %>
+                    </span>
+                  <% end %>
+
+                  <% if time_start.present? %>
+                    <span class="badge text-muted border" style="border-color: var(--salmon-border) !important;">
+                      <i class="bi bi-clock me-1"></i>
+                      Starts <%= time_start.strftime("%a %H:%M") %>
+                    </span>
+                  <% end %>
+                </div>
+
+                <div class="text-muted small mb-3">
+                  Attendees: <span class="fw-semibold" style="color: var(--salmon-ink);"><%= confirmed_count %></span>/<%= total_players %>
+                  <% if time_start.present? %>
+                    <span class="ms-2">in <%= time_ago_in_words(time_start) %></span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+              <div class="min-w-0">
+                <div class="small text-muted mb-1">Confirmed members</div>
+                <div class="d-flex align-items-center flex-wrap">
+                  <% confirmed_subscribers.limit(6).each do |sub| %>
+                    <div class="game-post-attendee-avatar rounded-circle overflow-hidden" title="<%= sub.username %>">
+                      <% if sub.photo&.attached? %>
+                        <%= image_tag sub.photo.variant(resize_to_fill: [32, 32]).processed, alt: "#{sub.username} profile" %>
+                      <% else %>
+                        <i class="bi bi-person-circle text-muted fs-5"></i>
+                      <% end %>
                     </div>
+                  <% end %>
 
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex">
-                            <i class="bi bi-person-circle fs-2"></i>
-                            <div class="mx-2">
-                                <p class="mb-0"><%= game_post.user_owner&.name %></p>
-                                <p class="mb-0 text-muted">@<%= game_post.user_owner.username %></p>
-                            </div>
-                        </div>
-                        <div>
-                            <h3>Confirmed members</h3>
-                            <div class="d-flex column-gap-1">
-                                <% game_post.accepted_subscribers.each do |sub| %>
-                                    <div>
-                                        <i class="bi bi-person-circle"></i>
-                                        <%# <%= sub.username %>
-                                    </div>
-                                <% end %>
-                                <i class="bi bi-plus-circle"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <h3>Attendees: <%= game_post.accepted_subscribers.count %>/<%= game_post.total_players %></h3>
-                            <h4 class="text-muted">in <%= time_ago_in_words(game_post.time_start) %></h4>
-                            <h6 class="text-muted"><%= "Today at #{game_post.time_start.strftime('%H:%M')}" %></h4>
-                        </div>
+                  <% if confirmed_count > 6 %>
+                    <div class="game-post-more-avatar">+<%= confirmed_count - 6 %></div>
+                  <% end %>
+                </div>
+              </div>
 
-                    </div>
-                    <% if user_signed_in? %>
-                        <% if game_post.enrollments.exists?(user_id: current_user.id, status: 'accepted') %>
-                                ✅ confrimed
-                        <% else %>
-                            <% if current_user&.owned_games.none? && current_user&.enrollments.none? %>
-                                <%= subscription_button_for(game_post) %>
-                            <% else %>
-                                <%= subscription_button_for(game_post, disabled: true) %>
-                            <% end %>
-                        <% end %>
-                        <% end %>
-        </div>
+              <div class="ms-auto">
+                <% if user_signed_in? %>
+                  <% if game_post.enrollments.exists?(user_id: current_user.id, status: 'accepted') %>
+                    <span class="badge text-bg-success">Confirmed</span>
+                  <% else %>
+                    <% if !has_owned_post && !has_active_request %>
+                      <%= subscription_button_for(game_post, class: "btn-salmon") %>
+                    <% else %>
+                      <%= subscription_button_for(game_post, disabled: true, class: "btn-salmon") %>
+                    <% end %>
+                  <% end %>
                 <% end %>
-    </div>
+              </div>
+            </div>
+
+            <% if game_post.description.present? %>
+              <p class="mt-3 mb-0 small text-muted" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                <%= game_post.description %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
