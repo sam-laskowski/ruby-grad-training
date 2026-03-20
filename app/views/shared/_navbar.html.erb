@@ -1,6 +1,92 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light dropin-navbar">
   <div class="container-fluid">
-    <%= link_to '📩 Dropins', game_posts_path, class: "navbar-brand fs-1 fw-bolder text-decoration-none text-reset" %>
+    <div class="d-flex">
+      <i class="bi bi-binoculars fs-1 px-2"></i>
+      <div>
+        <%= link_to 'Dropins', game_posts_path, class: "navbar-brand fs-1 fw-bolder text-decoration-none text-reset py-0" %>
+        <p class="mb-0">Join, fill your party and meet new people</p>
+      </div>
+    </div>
+
+    <style>
+      :root {
+        --salmon: #FA8072;
+        --salmon-soft: #FFE4DE;
+        --salmon-ink: #3A2B2B;
+        --salmon-border: rgba(250, 128, 114, 0.35);
+      }
+
+      .dropin-navbar {
+        background: var(--salmon-soft) !important;
+      }
+
+      .dropin-status-group {
+        min-width: 250px;
+        overflow: hidden; /* keeps rounded look for the whole group */
+        /* border-radius: 9999px; */
+        border: 1px solid var(--salmon-border);
+        /* background: #fff; */
+      }
+
+      .dropin-status-pill {
+        flex: 1;
+        min-height: 64px;
+        padding: 10px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--salmon-ink);
+        background: #fff;
+        border-right: 1px solid var(--salmon-border);
+      }
+      .dropin-status-pill:last-child {
+        border-right: 0;
+      }
+
+      .dropin-status-pill.disabled {
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .dropin-status-pill.active {
+        /* background: var(--salmon-soft); */
+        border-right-color: var(--salmon-border);
+        box-shadow: 0 0.25rem 0.75rem rgba(250, 128, 114, 0.18);
+        position: relative;
+      }
+
+      .dropin-status-pill .dropin-status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 9999px;
+        background: transparent;
+        margin-bottom: 6px;
+      }
+
+      .dropin-status-pill.active .dropin-status-indicator {
+        background: var(--salmon);
+      }
+
+      .dropin-profile-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 1px solid var(--salmon-border);
+        background: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .dropin-profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
       <span class="navbar-toggler-icon"></span>
@@ -13,60 +99,56 @@
 
 
             <%# Pill Component %>
-          <div class="container" style="min-width: 250px;">
-            <div class="d-flex text-center">
-                
-                <div class="flex-fill">
-                <%= link_to new_game_post_path, class: "text-decoration-none text-dark" do %>
-                    <div class="bg-white border py-1 shadow-sm rounded-start-pill border-end-0">
-                    <i class="bi bi-plus fs-6"></i>
-                    </div>
-                    <div class="mt-2">
-                    <small class="fw-bold" style="font-size: 0.7rem;">Create</small>
-                    </div>
-                <% end %>
-                </div>
+          <% confirmed_state = GamePost.confirmed_for_user(current_user).exists? %>
+          <% has_owned_post = current_user.owned_games.exists? %>
+          <% has_pending_request = current_user.enrollments.pending.exists? %>
+          <% has_accepted_request = current_user.enrollments.accepted.exists? %>
+          <% create_state = !confirmed_state && !has_owned_post && !has_pending_request && !has_accepted_request %>
+          <% active_state = !confirmed_state && !create_state %>
 
-                <div class="flex-fill">
-                <% if current_user&.owned_games.none? %>
-                    <%= link_to game_posts_path, class: "text-decoration-none text-dark" do %>
-                        <div class="bg-white border py-1 shadow-sm">
-                        <i class="bi bi-three-dots fs-6"></i>
-                        </div>
-                        <div class="mt-2">
-                        <small class="fw-bold" style="font-size: 0.7rem;">Pending</small>
-                        </div>
-                    <% end %>
-                <% else %>
-                    <%= link_to game_post_path(current_user.owned_games.last), class: "text-decoration-none text-dark" do %>
-                        <div class="bg-white border py-1 shadow-sm">
-                        <i class="bi bi-signpost fs-6"></i>
-                        </div>
-                        <div class="mt-2">
-                        <small class="fw-bold" style="font-size: 0.7rem;">Your Post</small>
-                        </div>
-                    <% end %>
-                <% end %>
-                </div>
+          <% pill2_label = has_owned_post ? "Your Post" : "Pending" %>
+          <% pill2_icon = has_owned_post ? "bi-signpost" : "bi-three-dots" %>
+          <% pill2_path = has_owned_post ? game_post_path(current_user.owned_games.last) : game_posts_path %>
 
-                <div class="flex-fill">
-                <%= link_to confirmed_event_path, class: "text-decoration-none text-dark" do %>
-                    <div class="bg-white border py-1 shadow-sm rounded-end-pill border-start-0">
-                    <i class="bi bi-check fs-6"></i>
-                    </div>
-                    <div class="mt-2">
-                    <small class="fw-bold" style="font-size: 0.7rem;">Confirmed</small>
-                    </div>
-                <% end %>
-                </div>
+          <div class="dropin-status-group d-flex text-center" role="group" aria-label="Dropin status">
+            <%= link_to new_game_post_path,
+              class: "dropin-status-pill #{create_state ? 'active' : 'disabled'}",
+              aria: { disabled: (!create_state).to_s },
+              tabindex: (!create_state ? -1 : 0) do %>
+              <%# <span class="dropin-status-indicator" aria-hidden="true"></span> %>
+              <i class="bi bi-plus fs-6"></i>
+              <small class="fw-bold" style="font-size: 0.7rem;">Create</small>
+            <% end %>
 
-            </div>
-            </div>
+            <%= link_to pill2_path,
+              class: "dropin-status-pill #{active_state ? 'active' : 'disabled'}",
+              aria: { disabled: (!active_state).to_s },
+              tabindex: (!active_state ? -1 : 0) do %>
+              <%# <span class="dropin-status-indicator" aria-hidden="true"></span> %>
+              <i class="bi <%= pill2_icon %> fs-6"></i>
+              <small class="fw-bold" style="font-size: 0.7rem;"><%= pill2_label %></small>
+            <% end %>
+
+            <%= link_to confirmed_event_path,
+              class: "dropin-status-pill #{confirmed_state ? 'active' : 'disabled'}",
+              aria: { disabled: (!confirmed_state).to_s },
+              tabindex: (!confirmed_state ? -1 : 0) do %>
+              <%# <span class="dropin-status-indicator" aria-hidden="true"></span> %>
+              <i class="bi bi-check fs-6"></i>
+              <small class="fw-bold" style="font-size: 0.7rem;">Confirmed</small>
+            <% end %>
+          </div>
           
           <%# Dropdown section %>
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle fs-1"></i>
+                <% if current_user.photo.attached? %>
+                  <span class="dropin-profile-avatar">
+                    <%= image_tag current_user.photo.variant(resize_to_fill: [44, 44]).processed, alt: "#{current_user.username} profile" %>
+                  </span>
+                <% else %>
+                  <i class="bi bi-person-circle fs-1"></i>
+                <% end %>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenu">
                 <li>

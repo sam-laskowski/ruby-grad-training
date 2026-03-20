@@ -1,5 +1,7 @@
 <% console %>
-<% if current_user.owned_games.none? && current_user.enrollments.none? %>
+<% has_owned_post = current_user.owned_games.exists? %>
+<% has_active_request = current_user.enrollments.where(status: [:pending, :accepted]).exists? %>
+<% if !has_owned_post && !has_active_request %>
   <h2>Create new dropin post</h2>
   <%= form_with model: @game_post do |form| %>
     <label for="name">
@@ -23,7 +25,7 @@
     </label>
 
     <label for="total_players">
-      How many more people are needed
+      Number of spaces (including yourself)
       <%= form.number_field :total_players, in: 1..10, step: 1, required: true %>
     </label>
 
