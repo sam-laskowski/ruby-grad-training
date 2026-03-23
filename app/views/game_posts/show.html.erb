@@ -172,7 +172,7 @@
               <% if @game_post.time_start.present? %>
                 <span class="badge text-muted border" style="border-color: var(--salmon-border) !important;">
                   <i class="bi bi-clock me-1"></i>
-                  Starts <%= @game_post.time_start.strftime("%a %H:%M") %>
+                  <%= @game_post.time_start.strftime("%a %H:%M") %>
                 </span>
               <% end %>
             </div>
