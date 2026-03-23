@@ -1,7 +1,219 @@
 
-<div>Profile for: <%= @user.username %></div>
-<div><%= @user&.name %></div>
-<div><%= @user&.bio %></div>
-<% if @user.photo.attached? %>
-  <div><%= image_tag(@user.photo_as_thumbnail) %></div>
-<% end %>
+<% owned_posts = @user.owned_games.order(created_at: :desc) %>
+<% pending_requests = @user.enrollments.pending.includes(:game_post).order(created_at: :desc) %>
+<% accepted_requests = @user.enrollments.accepted.includes(:game_post).order(created_at: :desc) %>
+<% confirmed_posts = GamePost.confirmed_for_user(@user).order(created_at: :desc) %>
+
+<% confirmed_state = confirmed_posts.exists? %>
+<% has_owned_post = owned_posts.exists? %>
+<% has_pending_request = pending_requests.exists? %>
+<% has_accepted_request = accepted_requests.exists? %>
+<% current_state =
+     if confirmed_state
+       "Confirmed"
+     elsif has_owned_post
+       "Your Post"
+     elsif has_pending_request || has_accepted_request
+       "Pending"
+     else
+       "Create"
+     end %>
+
+<div class="container py-4 profile-page">
+  <style>
+    :root {
+      --salmon: #FA8072;
+      --salmon-soft: #FFE4DE;
+      --salmon-ink: #3A2B2B;
+      --salmon-border: rgba(250, 128, 114, 0.35);
+    }
+
+    .dropin-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 1rem;
+    }
+
+    .profile-hero {
+      background: linear-gradient(135deg, var(--salmon-soft), #ffffff);
+      border: 1px solid var(--salmon-border);
+      border-radius: 1rem;
+    }
+
+    .profile-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--salmon-border);
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0.25rem 0.75rem rgba(250, 128, 114, 0.18);
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid var(--salmon-border);
+      background: var(--salmon-soft);
+      color: var(--salmon-ink);
+      font-weight: 700;
+    }
+
+    .profile-section-title {
+      color: var(--salmon-ink);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .profile-list-item {
+      border: 1px solid rgba(250, 128, 114, 0.18);
+      background: #fff;
+      border-radius: 0.85rem;
+      padding: 0.85rem;
+    }
+
+    .profile-small-muted {
+      color: rgba(58, 43, 43, 0.7);
+    }
+
+    .profile-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 0.85rem;
+      object-fit: cover;
+      border: 1px solid var(--salmon-border);
+      background: var(--salmon-soft);
+    }
+  </style>
+
+  <div class="profile-hero p-3 p-md-4">
+    <div class="d-flex flex-column flex-md-row gap-4 align-items-start align-items-md-center">
+      <div class="profile-avatar">
+        <% if @user.photo.attached? %>
+          <%= image_tag @user.photo_as_thumbnail, alt: "#{@user.username} profile photo" %>
+        <% else %>
+          <i class="bi bi-person-circle" style="font-size: 3rem; color: var(--salmon);"></i>
+        <% end %>
+      </div>
+
+      <div class="flex-grow-1 min-w-0">
+        <div class="d-flex flex-column flex-sm-row flex-wrap align-items-start align-items-sm-center gap-2">
+          <div class="h3 fw-bold mb-0 text-break" style="color: var(--salmon-ink);"><%= @user.name.presence || @user.username %></div>
+        </div>
+        <div class="profile-small-muted mt-1" style="font-weight: 600;">@<%= @user.username %></div>
+
+        <% if @user.bio.present? %>
+          <div class="mt-3" style="color: rgba(58, 43, 43, 0.85);">
+            <%= @user.bio %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  <div class="row g-4 mt-1">
+    <div class="col-lg-8">
+      <div class="dropin-card p-3 p-md-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="profile-section-title h5 mb-0">Recent activity</div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="profile-list-item">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="profile-section-title h6 mb-0">Your posts</div>
+                <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);"><%= owned_posts.size %></span>
+              </div>
+
+              <% if owned_posts.any? %>
+                <% owned_posts.limit(3).each do |post| %>
+                  <div class="d-flex align-items-center gap-3 py-2">
+                    <div>
+                      <% if post.cover_image.attached? %>
+                        <%= image_tag post.cover_image.variant(:thumb), class: "profile-thumb", alt: "#{post.name} cover" %>
+                      <% elsif post.images.attached? %>
+                        <%= image_tag post.images.first.variant(resize_to_fill: [56, 56]).processed, class: "profile-thumb", alt: "#{post.name} cover" %>
+                      <% else %>
+                        <div class="profile-thumb d-flex align-items-center justify-content-center">
+                          <i class="bi bi-image" style="color: var(--salmon-ink); opacity: 0.7;"></i>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="min-w-0 flex-grow-1">
+                      <div class="fw-bold text-truncate"><%= link_to post.name, game_post_path(post), class: "text-decoration-none", style: "color: var(--salmon-ink);" %></div>
+                      <% if post.time_start.present? %>
+                        <div class="profile-small-muted small">Starts <%= post.time_start.strftime("%a %H:%M") %></div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="profile-small-muted small">No posts yet.</div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="profile-list-item">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="profile-section-title h6 mb-0">Requests & invitations</div>
+                <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);"><%= pending_requests.size + accepted_requests.size %></span>
+              </div>
+
+              <% if pending_requests.any? || accepted_requests.any? %>
+                <% (pending_requests.to_a + accepted_requests.to_a).first(3).each do |enrollment| %>
+                  <div class="d-flex align-items-center justify-content-between gap-3 py-2">
+                    <div class="min-w-0">
+                      <div class="fw-bold text-truncate"><%= link_to enrollment.game_post.name, game_post_path(enrollment.game_post), class: "text-decoration-none", style: "color: var(--salmon-ink);" %></div>
+                      <div class="profile-small-muted small">Status: <%= enrollment.status.humanize %></div>
+                    </div>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="profile-small-muted small">No requests yet.</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="dropin-card p-3 p-md-4 h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="profile-section-title h5 mb-0">Confirmed events</div>
+          <%= link_to "View", confirmed_event_path, class: "text-decoration-none fw-bold", style: "color: var(--salmon);" %>
+        </div>
+
+        <% if confirmed_posts.any? %>
+          <div class="d-flex flex-column gap-2">
+            <% confirmed_posts.limit(4).each do |post| %>
+              <div class="profile-list-item">
+                <div class="fw-bold text-truncate">
+                  <%= link_to post.name, game_post_path(post), class: "text-decoration-none", style: "color: var(--salmon-ink);" %>
+                </div>
+                <% if post.time_start.present? %>
+                  <div class="profile-small-muted small">Starts <%= post.time_start.strftime("%a %H:%M") %></div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="profile-small-muted small">You don't have any confirmed events yet.</div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

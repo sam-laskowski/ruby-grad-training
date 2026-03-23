@@ -1,8 +1,7 @@
 class ConfirmedEventsController < ApplicationController
-  before_action :require_login, only: [:show]
+  before_action :require_login, only: [ :show ]
 
   def show
-    @confirmed_events = GamePost.confirmed_for_user(current_user)
+    @game_post = GamePost.confirmed_for_user(current_user).last
   end
-
 end

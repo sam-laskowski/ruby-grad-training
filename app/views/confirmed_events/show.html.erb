@@ -1,15 +1,215 @@
-<h1>My Confirmed Events</h1>
+<% owner = @game_post.user_owner %>
+<% pending_enrollments = (@pending_enrollments || []) %>
+<% is_owner = user_signed_in? && current_user == owner %>
 
-<% if @confirmed_events.any? %>
-  <div class="events-grid">
-    <% @confirmed_events.each do |post| %>
-      <div class="event-card">
-        <h2><%= post.name %></h2>
-        <p><%= post.description %></p>
-        <span class="">Status: Confirmed & Accepted</span>
+<div class="container py-4">
+  <style>
+    :root {
+      --salmon: #FA8072;
+      --salmon-soft: #FFE4DE;
+      --salmon-ink: #3A2B2B;
+      --salmon-border: rgba(250, 128, 114, 0.35);
+    }
+
+    .btn-salmon {
+      background: var(--salmon);
+      border-color: var(--salmon);
+      color: #fff;
+    }
+
+    .btn-salmon:hover {
+      background: #f56f61;
+      border-color: #f56f61;
+      color: #fff;
+    }
+
+    .dropin-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 1rem;
+    }
+
+    .dropin-card-soft {
+      background: linear-gradient(135deg, var(--salmon-soft), #ffffff);
+      border: 1px solid var(--salmon-border);
+      border-radius: 1rem;
+    }
+
+    .dropin-cover {
+      width: 132px;
+      height: 132px;
+      border-radius: 1rem;
+      object-fit: cover;
+      object-position: center;
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--salmon-border);
+      background: #fff;
+    }
+
+    .dropin-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--salmon-border);
+      background: var(--salmon-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dropin-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .dropin-attendee-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--salmon-border);
+      background: var(--salmon-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dropin-attendee-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .dropin-more-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--salmon-soft);
+      border: 1px solid var(--salmon-border);
+      color: var(--salmon-ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .dropin-status-pill-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 9999px;
+      border: 1px solid var(--salmon-border);
+      background: var(--salmon-soft);
+      color: var(--salmon-ink);
+      font-weight: 600;
+    }
+
+    .dropin-table th,
+    .dropin-table td {
+      vertical-align: middle;
+      border-color: rgba(250, 128, 114, 0.18);
+    }
+  </style>
+
+  <div class="row g-4 align-items-center">
+    <div class="col-lg-8">
+      <div class="dropin-card-soft p-3 p-md-4">
+        <div class="d-flex flex-column flex-md-row gap-4 align-items-start">
+          <div class="flex-shrink-0">
+            <% if @game_post.cover_image.attached? %>
+              <%= image_tag @game_post.cover_image.variant(:thumb), alt: "#{@game_post.name} cover", class: "dropin-cover" %>
+            <% elsif @game_post.images.attached? %>
+              <%= image_tag @game_post.images.first.variant(resize_to_fill: [132, 132]).processed, alt: "#{@game_post.name} cover", class: "dropin-cover" %>
+            <% else %>
+              <div class="dropin-cover d-flex align-items-center justify-content-center">
+                <i class="bi bi-image fs-1" style="color: var(--salmon-ink); opacity: 0.65;"></i>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="min-w-0 flex-grow-1">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+              <h1 class="h3 fw-bold mb-0" style="color: var(--salmon-ink);"><%= @game_post.name %></h1>
+              <span class="dropin-status-pill-pill">
+                <i class="bi bi-circle-fill" style="color: var(--salmon); font-size: 0.5rem;"></i>
+                <span class="text-capitalize"><%= @game_post.status.humanize %></span>
+              </span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="dropin-avatar">
+                <% if owner&.photo&.attached? %>
+                  <%= image_tag owner.photo.variant(resize_to_fill: [44, 44]).processed, alt: "#{owner.username} profile" %>
+                <% else %>
+                  <i class="bi bi-person-circle text-muted fs-4"></i>
+                <% end %>
+              </div>
+              <div class="min-w-0">
+                <div class="fw-semibold text-truncate"><%= owner&.name %></div>
+                <div class="text-muted small">@<%= owner&.username %></div>
+              </div>
+              <div class="ms-auto">
+                <div class="text-muted small">
+                  Attendees:
+                  <span style="color: var(--salmon-ink); font-weight: 700;">
+                    <%= @game_post.accepted_subscribers.count %>
+                  </span>
+                  / <%= @game_post.total_players %>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <% if @game_post.location.present? %>
+                <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);">
+                  <i class="bi bi-geo-alt me-1"></i><%= @game_post.location %>
+                </span>
+              <% end %>
+              <% if @game_post.time_start.present? %>
+                <span class="badge text-muted border" style="border-color: var(--salmon-border) !important;">
+                  <i class="bi bi-clock me-1"></i>
+                  Starts <%= @game_post.time_start.strftime("%a %H:%M") %>
+                </span>
+              <% end %>
+            </div>
+
+            <% if @game_post.description.present? %>
+              <p class="mb-0 text-muted" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
+                <%= @game_post.description %>
+              </p>
+            <% end %>
+          </div>
+        </div>
       </div>
-    <% end %>
+
+      <div class="dropin-card p-3 p-md-4 mt-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+          <div>
+            <div class="small text-muted mb-1">Confirmed members</div>
+            <div class="d-flex align-items-center flex-wrap">
+              <% confirmed_subscribers = @game_post.accepted_subscribers %>
+              <% confirmed_subscribers.limit(8).each do |sub| %>
+                <div class="dropin-attendee-avatar" title="<%= sub.username %>">
+                  <% if sub.photo&.attached? %>
+                    <%= image_tag sub.photo.variant(resize_to_fill: [32, 32]).processed, alt: "#{sub.username} profile" %>
+                  <% else %>
+                    <i class="bi bi-person-circle text-muted fs-5"></i>
+                  <% end %>
+                </div>
+              <% end %>
+
+              <% confirmed_count = confirmed_subscribers.count %>
+              <% if confirmed_count > 8 %>
+                <div class="dropin-more-avatar">+<%= confirmed_count - 8 %></div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-<% else %>
-  <p>You don't have any confirmed events yet.</p>
-<% end %>
+</div>
