@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_19_133227) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_23_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,6 +86,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_19_133227) do
     t.index ["user_owner_id"], name: "index_game_posts_on_user_owner_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "message", null: false
+    t.string "link"
+    t.datetime "read_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "username"
@@ -103,4 +113,5 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_19_133227) do
   add_foreign_key "enrollments", "game_posts"
   add_foreign_key "enrollments", "users"
   add_foreign_key "game_posts", "users", column: "user_owner_id"
+  add_foreign_key "notifications", "users"
 end
