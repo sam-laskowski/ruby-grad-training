@@ -1,12 +1,22 @@
-<h2>Sign up</h2>
-<%= form_with model: @user, url: sign_up_path do |form| %>
-  <label for="username">
-    Username
-    <%= form.text_field :username, required: true %>
-  </label>
-  <label for="password">
-    Password
-    <%= form.password_field :password, required: true %>
-  </label>
-  <%= form.submit "Sign Up" %>
-<% end %>
+<div class="container py-4 auth-form-page">
+  <div class="auth-form-card p-4 p-md-5">
+    <div class="mb-4">
+      <h2 class="h3 mb-1 auth-form-title">Sign up</h2>
+      <p class="mb-0 text-muted">Create your account to get started.</p>
+    </div>
+
+    <%= form_with model: @user, url: sign_up_path do |form| %>
+      <div class="mb-3">
+        <%= form.label :username, "Username", class: "onboarding-label" %>
+        <%= form.text_field :username, required: true, class: "onboarding-input", autocomplete: "username" %>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :password, "Password", class: "onboarding-label" %>
+        <%= form.password_field :password, required: true, class: "onboarding-input", autocomplete: "new-password" %>
+      </div>
+
+      <%= form.submit "Sign Up", class: "btn-salmon" %>
+    <% end %>
+  </div>
+</div>

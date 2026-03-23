@@ -1,0 +1,58 @@
+.auth-form-page {
+  --salmon: #fa8072;
+  --salmon-soft: #ffe4de;
+  --salmon-ink: #3a2b2b;
+  --salmon-border: rgba(250, 128, 114, 0.35);
+}
+
+.auth-form-page .auth-form-card {
+  max-width: 520px;
+  margin: 0 auto;
+  border: 1px solid var(--salmon-border);
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--salmon-soft), #ffffff);
+  box-shadow: 0 0.5rem 1.25rem rgba(250, 128, 114, 0.12);
+}
+
+.auth-form-page .auth-form-title {
+  color: var(--salmon-ink);
+}
+
+.auth-form-page .onboarding-label {
+  color: var(--salmon-ink);
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.auth-form-page .onboarding-input {
+  border: 1px solid #ffd3bd;
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  width: 100%;
+  background: #fff;
+}
+
+.auth-form-page .onboarding-input:focus {
+  border-color: var(--salmon);
+  box-shadow: 0 0 0 0.2rem rgba(250, 128, 114, 0.15);
+  outline: none;
+}
+
+.auth-form-page .btn-salmon {
+  background: var(--salmon);
+  border: 1px solid var(--salmon);
+  color: #fff;
+  border-radius: 0.75rem;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-form-page .btn-salmon:hover {
+  background: #f56f61;
+  border-color: #f56f61;
+  color: #fff;
+}

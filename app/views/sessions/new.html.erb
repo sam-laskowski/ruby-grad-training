@@ -1,12 +1,22 @@
-<h1>Login</h1>
-<%= form_with url: login_path, scope: :user do |form| %>
-  <label for="username">
-    Username
-    <%= form.text_field :username, required: true %>
-  </label>
-  <label for="password">
-    Password
-    <%= form.password_field :password, required: true %>
-  </label>
-  <%= form.submit "Sign In" %>
-<% end %>
+<div class="container py-4 auth-form-page">
+  <div class="auth-form-card p-4 p-md-5">
+    <div class="mb-4">
+      <h1 class="h3 mb-1 auth-form-title">Login</h1>
+      <p class="mb-0 text-muted">Welcome back. Sign in to continue.</p>
+    </div>
+
+    <%= form_with url: login_path, scope: :user do |form| %>
+      <div class="mb-3">
+        <%= form.label :username, "Username", class: "onboarding-label" %>
+        <%= form.text_field :username, required: true, class: "onboarding-input", autocomplete: "username" %>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :password, "Password", class: "onboarding-label" %>
+        <%= form.password_field :password, required: true, class: "onboarding-input", autocomplete: "current-password" %>
+      </div>
+
+      <%= form.submit "Sign In", class: "btn-salmon" %>
+    <% end %>
+  </div>
+</div>
