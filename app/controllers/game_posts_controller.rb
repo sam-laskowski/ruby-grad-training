@@ -1,6 +1,5 @@
 class GamePostsController < ApplicationController
-
-  before_action :require_login, only: [:new, :create]
+  before_action :require_login, only: [ :new, :create ]
 
     def index
       @game_posts = GamePost.not_confirmed
@@ -34,7 +33,7 @@ class GamePostsController < ApplicationController
 
   def destroy
     @game_post = current_user.owned_games.find(params[:id])
-  
+
     @game_post.destroy
     redirect_to game_posts_url, notice: "Post deleted."
     rescue ActiveRecord::RecordNotFound
@@ -43,7 +42,7 @@ class GamePostsController < ApplicationController
 
   def confirm
     @game_post = GamePost.find(params[:id])
-  
+
     if @game_post.confirmed!
       redirect_to @game_post, notice: "Game has been confirmed!"
     else

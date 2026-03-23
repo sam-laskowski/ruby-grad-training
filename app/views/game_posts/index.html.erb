@@ -229,7 +229,7 @@
                     <% if !has_owned_post && !has_active_request %>
                       <%= subscription_button_for(game_post, class: "btn-salmon") %>
                     <% else %>
-                      <%= subscription_button_for(game_post, disabled: true, class: "btn-salmon") %>
+                      <%= subscription_button_for(game_post, hidden: true, class: "btn-salmon") %>
                     <% end %>
                   <% end %>
                 <% end %>

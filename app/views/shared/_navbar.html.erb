@@ -86,6 +86,27 @@
         height: 100%;
         object-fit: cover;
       }
+
+      .dropin-pill-with-badge {
+        position: relative;
+      }
+
+      .dropin-notification-badge {
+        position: absolute;
+        top: 6px;
+        right: 10px;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9999px;
+        background: var(--salmon);
+        color: #fff;
+        font-size: 0.65rem;
+        line-height: 18px;
+        font-weight: 700;
+        text-align: center;
+        padding: 0 5px;
+        border: 1px solid #fff;
+      }
     </style>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -103,6 +124,11 @@
           <% has_owned_post = current_user.owned_games.exists? %>
           <% has_pending_request = current_user.enrollments.pending.exists? %>
           <% has_accepted_request = current_user.enrollments.accepted.exists? %>
+          <% owner_pending_requests_count = Enrollment.pending
+                                            .joins(:game_post)
+                                            .where(game_posts: { user_owner_id: current_user.id })
+                                            .where.not(user_id: current_user.id)
+                                            .count %>
           <% create_state = !confirmed_state && !has_owned_post && !has_pending_request && !has_accepted_request %>
           <% active_state = !confirmed_state && !create_state %>
 
@@ -121,10 +147,15 @@
             <% end %>
 
             <%= link_to pill2_path,
-              class: "dropin-status-pill #{active_state ? 'active' : 'disabled'}",
+              class: "dropin-status-pill dropin-pill-with-badge #{active_state ? 'active' : 'disabled'}",
               aria: { disabled: (!active_state).to_s },
               tabindex: (!active_state ? -1 : 0) do %>
               <%# <span class="dropin-status-indicator" aria-hidden="true"></span> %>
+              <% if has_owned_post && owner_pending_requests_count.positive? %>
+                <span id="navbar-post-request-badge" class="dropin-notification-badge" data-count="<%= owner_pending_requests_count %>"><%= owner_pending_requests_count %></span>
+              <% else %>
+                <span id="navbar-post-request-badge" class="dropin-notification-badge d-none" data-count="0">0</span>
+              <% end %>
               <i class="bi <%= pill2_icon %> fs-6"></i>
               <small class="fw-bold" style="font-size: 0.7rem;"><%= pill2_label %></small>
             <% end %>

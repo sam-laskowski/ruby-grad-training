@@ -21,10 +21,10 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
   </head>
 
-  <body>
+  <body data-current-user-id="<%= current_user&.id %>">
 
     <%# toaster %>
-    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999;">
+    <div id="global-toast-container" class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999;">
       <% if notice.present? %>
         <div id="notice-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="d-flex">

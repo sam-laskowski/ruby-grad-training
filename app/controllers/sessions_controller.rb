@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
       if @user.authenticate(params[:user][:password])
         reset_session
         session[:current_user_id] = @user.id
+        cookies.signed[:cable_user_id] = { value: @user.id, httponly: true }
         redirect_to game_posts_url, notice: "Signed in."
       else
         flash.now[:alert] = "Incorrect username or password."
@@ -21,6 +22,7 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
+    cookies.delete(:cable_user_id)
     redirect_to game_posts_url, status: :see_other, notice: "Logged out!"
   end
 end
