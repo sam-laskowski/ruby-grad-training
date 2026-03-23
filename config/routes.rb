@@ -14,17 +14,15 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  root 'application#hello'
   resources :entries, only: [ :create, :new, :index, :destroy ]
-  
   resources :users, only: [ :new, :create, :show ]
 
   get "login", to: "sessions#new", as: :login
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
 
-  get 'sign_up', to: 'users#new', as: :sign_up
-  post 'sign_up', to: 'users#create'
+  get "sign_up", to: "users#new", as: :sign_up
+  post "sign_up", to: "users#create"
 
   get "game_posts", to: "game_posts#index", as: :game_posts
   get "game_posts/new", to: "game_posts#new", as: :new_game_post
@@ -36,15 +34,17 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :game_posts, only: [:destroy]
+  resources :game_posts, only: [ :destroy ]
 
   resources :game_posts do
-    resources :enrollments, only: [:create, :destroy, :update]
+    resources :enrollments, only: [ :create, :destroy, :update ]
   end
 
-  resource :onboarding, only: [:edit, :update]
+  resource :onboarding, only: [ :edit, :update ]
 
-  resource :profile, only: [:show]
+  resource :profile, only: [ :show ]
 
-  resource :confirmed_event, only: [:show]
+  resource :confirmed_event, only: [ :show ]
+
+  resources :public_profiles, only: [ :show ]
 end

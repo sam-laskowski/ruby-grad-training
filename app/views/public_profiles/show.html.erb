@@ -1,0 +1,95 @@
+<div class="container py-4">
+  <style>
+    .public-profile-card {
+      border: 1px solid rgba(250, 128, 114, 0.35);
+      border-radius: 1rem;
+      background: linear-gradient(180deg, #fff7f4 0%, #ffffff 100%);
+      box-shadow: 0 0.5rem 1.25rem rgba(250, 128, 114, 0.12);
+    }
+
+    .public-profile-banner {
+      height: 6px;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      background: linear-gradient(90deg, #fa8072, #ffb070);
+    }
+
+    .public-profile-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid #ffb070;
+      overflow: hidden;
+      background: #fff2eb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .public-profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .public-profile-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #c06052;
+      margin-bottom: 0.25rem;
+    }
+
+    .public-profile-value {
+      color: #4d2d28;
+      font-weight: 600;
+      word-break: break-word;
+    }
+  </style>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <div class="public-profile-card">
+        <div class="public-profile-banner"></div>
+        <div class="p-4 p-md-5">
+          <div class="text-center mb-4">
+            <div class="public-profile-avatar mb-3">
+              <% if @user.photo.attached? %>
+                <%= image_tag @user.photo_as_thumbnail, alt: "#{@user.username} profile photo" %>
+              <% else %>
+                <i class="bi bi-person-circle" style="font-size: 3rem; color: #fa8072;"></i>
+              <% end %>
+            </div>
+            <h2 class="h4 mb-1" style="color: #4d2d28;"><%= @user.name.presence || @user.username %></h2>
+            <p class="mb-0 text-muted">@<%= @user.username %></p>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="p-3 rounded-3" style="background: #fff3ec; border: 1px solid #ffd3bd;">
+                <div class="public-profile-label">Bio</div>
+                <div class="public-profile-value">
+                  <%= @user.bio.presence || "This user has not added a bio yet." %>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <div class="p-3 rounded-3 h-100" style="background: #ffffff; border: 1px solid #ffd3bd;">
+                <div class="public-profile-label">Posts Created</div>
+                <div class="public-profile-value"><%= @user.owned_games.count %></div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <div class="p-3 rounded-3 h-100" style="background: #ffffff; border: 1px solid #ffd3bd;">
+                <div class="public-profile-label">Joined</div>
+                <div class="public-profile-value"><%= @user.created_at.strftime("%b %Y") %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
