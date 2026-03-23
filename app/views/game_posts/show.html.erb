@@ -113,10 +113,51 @@
       vertical-align: middle;
       border-color: rgba(250, 128, 114, 0.18);
     }
+
+    .game-post-owner-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+    }
+
+    .game-post-attendee-avatar {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--salmon-soft);
+      border: 1px solid var(--salmon-border);
+      margin-right: 0.25rem;
+    }
+
+    .game-post-attendee-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+    }
+
+    .game-post-more-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--salmon-soft);
+      border: 1px solid var(--salmon-border);
+      color: var(--salmon-ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
   </style>
 
   <div class="row g-4 align-items-start">
-    <div class="col-lg-8">
+    <div class="">
       <div class="dropin-card-soft p-3 p-md-4">
         <div class="d-flex flex-column flex-md-row gap-4 align-items-start">
           <div class="flex-shrink-0">
@@ -186,34 +227,57 @@
         </div>
       </div>
 
-      <div class="dropin-card p-3 p-md-4 mt-4">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-          <div>
-            <div class="small text-muted mb-1">Confirmed members</div>
-            <div class="d-flex align-items-center flex-wrap">
-              <% confirmed_subscribers = @game_post.accepted_subscribers %>
-              <% confirmed_subscribers.limit(8).each do |sub| %>
-                <div class="dropin-attendee-avatar" title="<%= sub.username %>">
-                  <% if sub.photo&.attached? %>
-                    <%= image_tag sub.photo.variant(resize_to_fill: [32, 32]).processed, alt: "#{sub.username} profile" %>
-                  <% else %>
-                    <i class="bi bi-person-circle text-muted fs-5"></i>
+      <% confirmed_subscribers = @game_post.accepted_subscribers %>
+      <div class="dropin-card p-3 p-md-4 my-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="min-w-0">
+              <div class="small text-muted mb-1">Confirmed members</div>
+              <div class="d-flex align-items-center flex-wrap">
+                <% confirmed_subscribers.limit(6).each do |sub| %>
+                  <% popover_content = capture do %>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <% if sub.photo&.attached? %>
+                        <%= image_tag sub.photo.variant(resize_to_fill: [40, 40]).processed, alt: "#{sub.username} profile", class: "rounded-circle" %>
+                      <% else %>
+                        <i class="bi bi-person-circle text-muted" style="font-size: 2rem;"></i>
+                      <% end %>
+                      <div class="min-w-0">
+                        <div class="fw-semibold text-dark text-truncate"><%= sub.name.presence || sub.username %></div>
+                        <div class="text-muted small text-truncate">@<%= sub.username %></div>
+                      </div>
+                    </div>
+                    <%= link_to "View profile", public_profile_path(sub), class: "btn btn-sm btn-salmon w-100 text-white" %>
                   <% end %>
-                </div>
-              <% end %>
 
-              <% confirmed_count = confirmed_subscribers.count %>
-              <% if confirmed_count > 8 %>
-                <div class="dropin-more-avatar">+<%= confirmed_count - 8 %></div>
-              <% end %>
+                  <button
+                    type="button"
+                    class="game-post-attendee-avatar rounded-circle overflow-hidden p-0"
+                    data-bs-container="body"
+                    data-bs-toggle="popover"
+                    data-bs-trigger="hover focus"
+                    data-bs-placement="top"
+                    data-bs-html="true"
+                    data-bs-content="<%= popover_content.gsub("\n", "").squish %>"
+                    aria-label="View <%= sub.username %> details"
+                  >
+                    <% if sub.photo&.attached? %>
+                      <%= image_tag sub.photo.variant(resize_to_fill: [32, 32]).processed, alt: "#{sub.username} profile" %>
+                    <% else %>
+                      <i class="bi bi-person-circle text-muted fs-5"></i>
+                    <% end %>
+                  </button>
+                <% end %>
+
+                <% if confirmed_subscribers.count > 6 %>
+                  <div class="game-post-more-avatar">+<%= confirmed_count - 6 %></div>
+                <% end %>
+              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 
-    <div class="col-lg-4">
-      <div class="dropin-card p-3 p-md-4">
+    <div class="d-flex">
+      <div class="dropin-card p-3 p-md-4 col-lg-4">
         <% if is_owner %>
           <div class="d-flex align-items-center justify-content-between mb-3">
             <div>
@@ -281,7 +345,7 @@
       </div>
 
       <% if is_owner %>
-        <div class="dropin-card p-3 p-md-4 mt-4">
+        <div class="dropin-card p-3 p-md-4 col-lg-4 mx-4">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <h2 class="h6 mb-0">Pending requests</h2>
             <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);">

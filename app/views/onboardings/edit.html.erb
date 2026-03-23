@@ -1,38 +1,117 @@
-<div>Onboarding for <%= @user.username %></div>
-<h1>Complete Your Profile</h1>
-<p>Tell us a bit more about yourself (optional).</p>
+<div class="container py-4">
+  <style>
+    :root {
+      --salmon: #FA8072;
+      --salmon-soft: #FFE4DE;
+      --salmon-ink: #3A2B2B;
+      --salmon-border: rgba(250, 128, 114, 0.35);
+    }
 
-<%= form_with model: @user, url: onboarding_path(@user), method: :patch, local: true do |f| %>
+    .onboarding-card {
+      max-width: 720px;
+      margin: 0 auto;
+      border: 1px solid var(--salmon-border);
+      border-radius: 1rem;
+      background: linear-gradient(135deg, var(--salmon-soft), #ffffff);
+      box-shadow: 0 0.5rem 1.25rem rgba(250, 128, 114, 0.12);
+    }
 
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this profile from being saved:</h2>
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    .onboarding-label {
+      color: var(--salmon-ink);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .onboarding-input {
+      border: 1px solid #ffd3bd;
+      border-radius: 0.75rem;
+      padding: 0.65rem 0.8rem;
+      width: 100%;
+      background: #fff;
+    }
+
+    .onboarding-input:focus {
+      border-color: var(--salmon);
+      box-shadow: 0 0 0 0.2rem rgba(250, 128, 114, 0.15);
+      outline: none;
+    }
+
+    .btn-salmon {
+      background: var(--salmon);
+      border: 1px solid var(--salmon);
+      color: #fff;
+      border-radius: 0.75rem;
+      padding: 0.55rem 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-salmon:hover {
+      background: #f56f61;
+      border-color: #f56f61;
+      color: #fff;
+    }
+
+    .btn-salmon-soft {
+      background: #fff;
+      border: 1px solid #ffd3bd;
+      color: var(--salmon-ink);
+      border-radius: 0.75rem;
+      padding: 0.55rem 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-salmon-soft:hover {
+      background: #fff5f1;
+      color: var(--salmon-ink);
+    }
+  </style>
+
+  <div class="onboarding-card p-4 p-md-5">
+    <div class="mb-4">
+      <div class="small text-muted mb-1">Onboarding for @<%= @user.username %></div>
+      <h1 class="h3 mb-1" style="color: var(--salmon-ink);">Complete Your Profile</h1>
+      <p class="mb-0 text-muted">Tell us a bit more about yourself (optional).</p>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label "Full name" %>
-    <%= f.text_field :name, placeholder: "Sam" %>
+    <%= form_with model: @user, url: onboarding_path(@user), method: :patch, local: true do |f| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="alert mb-4" style="background: #fff3ec; border: 1px solid #ffd3bd; color: #8c3f34;">
+          <h2 class="h6 mb-2"><%= pluralize(@user.errors.count, "error") %> prevented your profile from being saved:</h2>
+          <ul class="mb-0 ps-3">
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.label :name, "Full name", class: "onboarding-label" %>
+        <%= f.text_field :name, placeholder: "Sam", class: "onboarding-input" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :bio, class: "onboarding-label" %>
+        <%= f.text_area :bio, placeholder: "Share a little about yourself...", rows: 4, class: "onboarding-input" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :photo, class: "onboarding-label" %>
+        <%= f.file_field :photo, class: "form-control", style: "border-radius: 0.75rem; border-color: #ffd3bd;" %>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        <%= f.submit "Save and Continue", class: "btn-salmon" %>
+        <%= link_to "Skip for now", game_posts_path, class: "btn-salmon-soft" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="field">
-    <%= f.label :bio %>
-    <%= f.text_area :bio, placeholder: "Share a little about yourself..." %>
-  </div>
-
-  <div class="field">
-    <%= f.label :photo %>
-    <%= f.file_field :photo %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Save and Continue", class: "button-primary" %>
-    <%= link_to "Skip for now", game_posts_path, class: "button-secondary" %>
-  </div>
-
-<% end %>
+</div>

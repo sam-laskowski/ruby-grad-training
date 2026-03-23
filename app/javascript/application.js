@@ -11,6 +11,12 @@ import * as bootstrap from "bootstrap";
 const consumer = createConsumer();
 let notificationsSubscription = null;
 
+const initPopovers = () => {
+  document.querySelectorAll('[data-bs-toggle="popover"]').forEach((popoverTriggerEl) => {
+    bootstrap.Popover.getOrCreateInstance(popoverTriggerEl);
+  });
+};
+
 const initToasts = () => {
   document.querySelectorAll(".toast").forEach((toastEl) => {
     const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
@@ -132,5 +138,7 @@ const initNotificationsSubscription = () => {
 
 document.addEventListener("DOMContentLoaded", initToasts);
 document.addEventListener("turbo:load", initToasts);
+document.addEventListener("DOMContentLoaded", initPopovers);
+document.addEventListener("turbo:load", initPopovers);
 document.addEventListener("DOMContentLoaded", initNotificationsSubscription);
 document.addEventListener("turbo:load", initNotificationsSubscription);

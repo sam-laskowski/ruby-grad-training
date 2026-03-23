@@ -171,9 +171,9 @@
                     <% end %>
                   </div>
 
-                  <div class="min-w-0">
-                    <div class="fw-semibold text-truncate"><%= owner&.name %></div>
-                    <div class="text-muted small">@<%= owner&.username %></div>
+                  <div class="min-w-0 d-flex flex-column">
+                    <%= link_to "#{owner&.name}", public_profile_path(owner), class: "text-truncate fw-semibold text-black text-decoration-none" %>
+                    <%= link_to "@#{owner&.username}", public_profile_path(owner), class: "text-muted small text-decoration-none" %>
                   </div>
                 </div>
 
@@ -206,13 +206,38 @@
                 <div class="small text-muted mb-1">Confirmed members</div>
                 <div class="d-flex align-items-center flex-wrap">
                   <% confirmed_subscribers.limit(6).each do |sub| %>
-                    <div class="game-post-attendee-avatar rounded-circle overflow-hidden" title="<%= sub.username %>">
+                    <% popover_content = capture do %>
+                      <div class="d-flex align-items-center gap-2 mb-2">
+                        <% if sub.photo&.attached? %>
+                          <%= image_tag sub.photo.variant(resize_to_fill: [40, 40]).processed, alt: "#{sub.username} profile", class: "rounded-circle" %>
+                        <% else %>
+                          <i class="bi bi-person-circle text-muted" style="font-size: 2rem;"></i>
+                        <% end %>
+                        <div class="min-w-0">
+                          <div class="fw-semibold text-dark text-truncate"><%= sub.name.presence || sub.username %></div>
+                          <div class="text-muted small text-truncate">@<%= sub.username %></div>
+                        </div>
+                      </div>
+                      <%= link_to "View profile", public_profile_path(sub), class: "btn btn-sm btn-salmon w-100 text-white" %>
+                    <% end %>
+
+                    <button
+                      type="button"
+                      class="game-post-attendee-avatar rounded-circle overflow-hidden p-0"
+                      data-bs-container="body"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover focus"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-content="<%= popover_content.gsub("\n", "").squish %>"
+                      aria-label="View <%= sub.username %> details"
+                    >
                       <% if sub.photo&.attached? %>
                         <%= image_tag sub.photo.variant(resize_to_fill: [32, 32]).processed, alt: "#{sub.username} profile" %>
                       <% else %>
                         <i class="bi bi-person-circle text-muted fs-5"></i>
                       <% end %>
-                    </div>
+                    </button>
                   <% end %>
 
                   <% if confirmed_count > 6 %>
