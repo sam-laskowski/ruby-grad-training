@@ -20,84 +20,6 @@
      end %>
 
 <div class="container py-4 profile-page">
-  <style>
-    :root {
-      --salmon: #FA8072;
-      --salmon-soft: #FFE4DE;
-      --salmon-ink: #3A2B2B;
-      --salmon-border: rgba(250, 128, 114, 0.35);
-    }
-
-    .dropin-card {
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: 1rem;
-    }
-
-    .profile-hero {
-      background: linear-gradient(135deg, var(--salmon-soft), #ffffff);
-      border: 1px solid var(--salmon-border);
-      border-radius: 1rem;
-    }
-
-    .profile-avatar {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 1px solid var(--salmon-border);
-      background: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0.25rem 0.75rem rgba(250, 128, 114, 0.18);
-    }
-
-    .profile-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .profile-state {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.75rem;
-      border-radius: 9999px;
-      border: 1px solid var(--salmon-border);
-      background: var(--salmon-soft);
-      color: var(--salmon-ink);
-      font-weight: 700;
-    }
-
-    .profile-section-title {
-      color: var(--salmon-ink);
-      font-weight: 800;
-      letter-spacing: -0.01em;
-    }
-
-    .profile-list-item {
-      border: 1px solid rgba(250, 128, 114, 0.18);
-      background: #fff;
-      border-radius: 0.85rem;
-      padding: 0.85rem;
-    }
-
-    .profile-small-muted {
-      color: rgba(58, 43, 43, 0.7);
-    }
-
-    .profile-thumb {
-      width: 56px;
-      height: 56px;
-      border-radius: 0.85rem;
-      object-fit: cover;
-      border: 1px solid var(--salmon-border);
-      background: var(--salmon-soft);
-    }
-  </style>
-
   <div class="profile-hero p-3 p-md-4">
     <div class="d-flex flex-column flex-md-row gap-4 align-items-start align-items-md-center">
       <div class="profile-avatar">
@@ -193,7 +115,9 @@
       <div class="dropin-card p-3 p-md-4 h-100">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="profile-section-title h5 mb-0">Confirmed events</div>
-          <%= link_to "View", confirmed_event_path, class: "text-decoration-none fw-bold", style: "color: var(--salmon);" %>
+          <% if confirmed_posts.any? %>
+            <%= link_to "View", confirmed_event_path, class: "text-decoration-none fw-bold", style: "color: var(--salmon);" %>
+          <% end %>
         </div>
 
         <% if confirmed_posts.any? %>

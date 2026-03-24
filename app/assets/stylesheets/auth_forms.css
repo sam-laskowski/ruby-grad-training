@@ -40,15 +40,8 @@
 
 .auth-form-page .btn-salmon {
   background: var(--salmon);
-  border: 1px solid var(--salmon);
+  border-color: var(--salmon);
   color: #fff;
-  border-radius: 0.75rem;
-  padding: 0.55rem 1rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .auth-form-page .btn-salmon:hover {
