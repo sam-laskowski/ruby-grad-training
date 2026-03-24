@@ -41,7 +41,7 @@
                 </h3>
 
                 <div class="d-flex align-items-center gap-2 mb-2">
-                  <div class="game-post-owner-avatar rounded-circle overflow-hidden">
+                  <div class="game-post-owner-avatar overflow-hidden">
                     <% if owner&.photo&.attached? %>
                       <%= image_tag owner.photo.variant(resize_to_fill: [44, 44]).processed, alt: "#{owner.username} profile" %>
                     <% else %>
@@ -87,7 +87,7 @@
                     <% popover_content = capture do %>
                       <div class="d-flex align-items-center gap-2 mb-2">
                         <% if sub.photo&.attached? %>
-                          <%= image_tag sub.photo.variant(resize_to_fill: [40, 40]).processed, alt: "#{sub.username} profile", class: "rounded-circle" %>
+                          <%= image_tag sub.photo.variant(resize_to_fill: [40, 40]).processed, alt: "#{sub.username} profile", class: "" %>
                         <% else %>
                           <i class="bi bi-person-circle text-muted" style="font-size: 2rem;"></i>
                         <% end %>
@@ -101,7 +101,7 @@
 
                     <button
                       type="button"
-                      class="game-post-attendee-avatar rounded-circle overflow-hidden p-0"
+                      class="game-post-attendee-avatar overflow-hidden p-0"
                       data-bs-container="body"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover focus"
