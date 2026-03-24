@@ -93,7 +93,7 @@
                         <div class="text-muted small text-truncate">@<%= sub.username %></div>
                       </div>
                     </div>
-                    <%= link_to "View profile", public_profile_path(sub), class: "btn btn-sm btn-salmon w-100 text-white" %>
+                    <%= link_to "View profile", public_profile_path(sub), class: "btn-salmon" %>
                   <% end %>
 
                   <button
@@ -136,8 +136,8 @@
 
           <% if @game_post.open? || @game_post.full? %>
             <div class="d-grid gap-2">
-              <%= button_to "Delete", @game_post, method: :delete, class: "btn btn-outline-secondary" %>
-              <%= button_to "Confirm Event", confirm_game_post_path(@game_post), method: :patch, class: "btn btn-salmon" %>
+              <%= button_to "Delete", @game_post, method: :delete, class: "btn-salmon-decline" %>
+              <%= button_to "Confirm Event", confirm_game_post_path(@game_post), method: :patch, class: "btn-salmon" %>
             </div>
           <% else %>
             <div class="text-muted small">
@@ -229,8 +229,8 @@
                       </td>
                       <td class="text-end">
                         <div class="d-flex justify-content-end gap-2">
-                          <%= button_to "Accept", game_post_enrollment_path(@game_post, enrollment, status: "accepted"), method: :patch, class: "btn btn-sm btn-salmon" %>
-                          <%= button_to "Decline", game_post_enrollment_path(@game_post, enrollment, status: "rejected"), method: :patch, class: "btn btn-sm btn-outline-secondary" %>
+                          <%= button_to "Accept", game_post_enrollment_path(@game_post, enrollment, status: "accepted"), method: :patch, class: "btn-salmon" %>
+                          <%= button_to "Decline", game_post_enrollment_path(@game_post, enrollment, status: "rejected"), method: :patch, class: "btn-salmon-decline  " %>
                         </div>
                       </td>
                     </tr>

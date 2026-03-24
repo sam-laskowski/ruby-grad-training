@@ -17,7 +17,7 @@
 
           <div class="row g-3">
             <div class="col-12">
-              <div class="p-3 rounded-3" style="background: #fff3ec; border: 1px solid #ffd3bd;">
+              <div class="p-3" style="border: 1px solid;">
                 <div class="public-profile-label">Bio</div>
                 <div class="public-profile-value">
                   <%= @user.bio.presence || "This user has not added a bio yet." %>
@@ -26,14 +26,14 @@
             </div>
 
             <div class="col-12 col-sm-6">
-              <div class="p-3 rounded-3 h-100" style="background: #ffffff; border: 1px solid #ffd3bd;">
+              <div class="p-3 h-100" style="background: #ffffff; border: 1px solid;">
                 <div class="public-profile-label">Posts Created</div>
                 <div class="public-profile-value"><%= @user.owned_games.count %></div>
               </div>
             </div>
 
             <div class="col-12 col-sm-6">
-              <div class="p-3 rounded-3 h-100" style="background: #ffffff; border: 1px solid #ffd3bd;">
+              <div class="p-3 h-100" style="background: #ffffff; border: 1px solid;">
                 <div class="public-profile-label">Joined</div>
                 <div class="public-profile-value"><%= @user.created_at.strftime("%b %Y") %></div>
               </div>

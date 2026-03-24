@@ -90,7 +90,7 @@
             <div class="profile-list-item">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <div class="profile-section-title h6 mb-0">Requests & invitations</div>
-                <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid var(--salmon-border);"><%= pending_requests.size + accepted_requests.size %></span>
+                <span class="badge" style="background: var(--salmon-soft); color: var(--salmon-ink); border: 1px solid;"><%= pending_requests.size + accepted_requests.size %></span>
               </div>
 
               <% if pending_requests.any? || accepted_requests.any? %>
