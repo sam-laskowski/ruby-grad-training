@@ -374,9 +374,9 @@
                               <i class="bi bi-person-circle text-muted fs-4"></i>
                             <% end %>
                           </div>
-                          <div class="min-w-0">
-                            <div class="fw-semibold text-truncate"><%= enrollment.user.username %></div>
-                            <div class="text-muted small">@<%= enrollment.user.username %></div>
+                          <div class="min-w-0 d-flex flex-column">
+                            <%= link_to "#{enrollment.user&.name}", public_profile_path(owner), class: "text-truncate fw-semibold text-black text-decoration-none" %>
+                            <%= link_to "@#{enrollment.user&.username}", public_profile_path(owner), class: "text-muted small text-decoration-none" %>
                           </div>
                         </div>
                       </td>
