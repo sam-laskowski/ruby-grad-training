@@ -42,6 +42,10 @@
           </div>
         <% end %>
       </div>
+      <%# proifle edit button %>
+      <div>
+        <%= button_to "Edit", edit_user_url(current_user), method: :get, class: "btn-salmon" %>
+      </div>
     </div>
 
   <div class="row g-4 mt-1">

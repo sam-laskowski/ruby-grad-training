@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :entries, only: [ :create, :new, :index, :destroy ]
-  resources :users, only: [ :new, :create, :show ]
+  resources :users, only: [ :new, :create, :show, :update, :edit ]
 
   get "login", to: "sessions#new", as: :login
   post "login", to: "sessions#create"

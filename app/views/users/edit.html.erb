@@ -1,0 +1,36 @@
+<div class="container py-4">
+  <div class="onboarding-card p-4 p-md-5">
+    <div class="mb-4">
+      <div class="small text-muted mb-1">Editing @<%= @user.username %></div>
+      <h1 class="h3 mb-1" style="color: var(--salmon-ink);">Complete Your Profile</h1>
+      <p class="mb-0 text-muted">Tell us a bit more about yourself (optional).</p>
+    </div>
+
+    <%= form_with model: @user, method: :patch, local: true do |f| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="alert mb-4" style="background: #fff3ec; border: 1px solid #ffd3bd; color: #8c3f34;">
+          <h2 class="h6 mb-2"><%= pluralize(@user.errors.count, "error") %> prevented your profile from being saved:</h2>
+          <ul class="mb-0 ps-3">
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.label :name, "Full name", class: "onboarding-label" %>
+        <%= f.text_field :name, placeholder: "Sam", class: "onboarding-input" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :bio, class: "onboarding-label" %>
+        <%= f.text_area :bio, placeholder: "Share a little about yourself...", rows: 4, class: "onboarding-input" %>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        <%= f.submit "Save changes", class: "btn-salmon" %>
+      </div>
+    <% end %>
+  </div>
+</div>

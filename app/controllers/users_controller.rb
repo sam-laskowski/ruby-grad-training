@@ -15,8 +15,26 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(session[:current_user_id])
+  end
+
+  def update
+    @user = User.find(session[:current_user_id])
+    @user.update(edit_params)
+
+    if @user.save
+      redirect_to profile_url, notice: "Profile updated successfully!"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
     def user_params
       params.require(:user).permit(:username, :password)
+    end
+    def edit_params
+      params.require(:user).permit(:name, :bio)
     end
 end
