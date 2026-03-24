@@ -25,7 +25,7 @@
       <div class="profile-avatar">
         <% if @user.photo.attached? %>
           <%= image_tag @user.photo_as_thumbnail, alt: "#{@user.username} profile photo" %>
-        <% else %>
+        <% else %>  
           <i class="bi bi-person-circle" style="font-size: 3rem; color: var(--salmon);"></i>
         <% end %>
       </div>
@@ -116,7 +116,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="profile-section-title h5 mb-0">Confirmed events</div>
           <% if confirmed_posts.any? %>
-            <%= link_to "View", confirmed_event_path, class: "text-decoration-none fw-bold", style: "color: var(--salmon);" %>
+            <%= link_to "View", confirmed_event_path, class: "text-decoration-none fw-bold", style: "" %>
           <% end %>
         </div>
 

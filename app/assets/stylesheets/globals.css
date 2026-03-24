@@ -416,7 +416,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0.25rem 0.75rem rgba(250, 128, 114, 0.18);
 }
 
 .profile-avatar img {
